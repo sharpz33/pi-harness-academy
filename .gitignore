@@ -1,0 +1,8 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+node_modules/
+
+# Licensed course tooling — local only, never publish
+.ai/
