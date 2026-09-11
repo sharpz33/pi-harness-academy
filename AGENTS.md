@@ -1,6 +1,6 @@
 # Repository Guidelines
 
-Pi Harness Academy is a TypeScript application built with Hono for Cloudflare Workers. It serves public course content and verifies progress from an isolated Pi Academy profile.
+Pi Harness Academy is a TypeScript application built with Hono for Cloudflare Workers. It serves public lessons and verifies progress from an isolated Academy profile.
 
 ## Critical product and safety rules
 
@@ -29,7 +29,7 @@ The same quality gate runs in `@.github/workflows/ci.yml`. Do not report it as p
 - `@src/index.ts` is the current Worker entry point; `@wrangler.jsonc` owns Worker configuration.
 - Read `@context/foundation/shape-notes.md`, `@context/foundation/prd.md`, `@context/foundation/curriculum.md`, and `@context/foundation/tech-stack.md` before changing product behavior.
 - Use `@context/foundation/experience-design-research.md` for UX direction and research files for supporting evidence rather than copying them here.
-- D1, Email Sending, public remote, and CI are not configured yet. Do not assume bindings or deployed infrastructure exist.
+- D1 and Email Sending are unconfigured. Repository, CI, and Worker exist; deployment remains manual until GitHub has a dedicated Cloudflare token.
 
 ## Working conventions
 

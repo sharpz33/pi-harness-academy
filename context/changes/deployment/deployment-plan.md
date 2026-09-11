@@ -1,10 +1,13 @@
 ---
 project: Pi Harness Academy
-status: approved
+status: first-deploy-complete
 approved_at: 2026-09-11T14:45:51+02:00
 platform: Cloudflare Workers
 repository: sharpz33/pi-harness-academy
 production_worker: pi-harness-academy
+deployed_commit: 89041c7b04a4f0d266b3b1e5db8c056426c2b823
+cloudflare_version: fb295add-266f-4f90-9b73-5dd0d3209c3a
+public_url: https://pi-harness-academy.lukasz-f4c.workers.dev
 ---
 
 # First Deployment Plan
@@ -50,14 +53,14 @@ Approval of this plan authorizes local preparation only. Public repository creat
 ## Phase 3 — First Production Deployment
 
 - [x] Add a production deployment workflow triggered manually with `workflow_dispatch`.
-- [ ] Store only `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in GitHub Actions secrets; never print their values.
-- [ ] Record the exact commit selected for deployment and confirm the Worker name and account.
-- [ ] Run and show the final deployment dry-run.
-- [ ] Ask explicitly: `Wdrażam pi-harness-academy do PROD na Cloudflare Workers. Potwierdź?`
-- [ ] Dispatch the production workflow and wait for a deterministic success result.
-- [ ] Verify the returned `workers.dev` URL, HTTP status, HTML Content-Type, expected page title, and runtime logs.
-- [ ] Record the deployed commit and URL.
-- [ ] After rollback verification, change the production workflow to deploy automatically after successful CI on `main`.
+- [ ] Store only a dedicated least-privilege `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in the GitHub `production` environment; never print their values. The existing broader local token must not be copied to GitHub.
+- [x] Record the exact commit selected for deployment and confirm the Worker name and account.
+- [x] Run and show the final deployment dry-run.
+- [x] Ask explicitly: `Wdrażam pi-harness-academy do PROD na Cloudflare Workers. Potwierdź?`
+- [x] Deploy locally with Wrangler after the user selected the local-first option; keep the GitHub workflow inactive until a dedicated token exists.
+- [x] Verify the returned `workers.dev` URL, HTTP status, HTML Content-Type, expected page title, and runtime error tail.
+- [x] Record the deployed commit, Cloudflare version, and public URL.
+- [ ] After a second version makes rollback testing possible and the dedicated token is configured, change the production workflow to deploy automatically after successful CI on `main`.
 
 ## Rollback and Failure Handling
 
