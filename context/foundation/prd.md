@@ -1,84 +1,31 @@
 ---
 project: "Pi Harness Academy"
+version: 1
+status: draft
+created: 2026-09-10
 context_type: greenfield
 product_type: web-app
 target_scale:
   users: large
   qps: unknown
   data_volume: unknown
-created: 2026-09-10
-updated: 2026-09-10
 timeline_budget:
   mvp_weeks: 1
   hard_deadline: 2026-09-14
   after_hours_only: true
-checkpoint:
-  current_phase: 8
-  phases_completed: [1, 2, 3, 4, 5, 6, 7]
-  gray_areas_resolved:
-    - topic: context type
-      decision: greenfield — the product application is being built from scratch
-    - topic: primary persona
-      decision: developer already using Claude Code or Codex who wants to move to Pi
-    - topic: primary pain
-      decision: loss of control over the harness; token cost is a visible symptom, not the whole problem
-    - topic: anonymous access
-      decision: all lesson content and mission instructions are public; an OTP account and authorized Academy profile are required for verified checkpoints, progress, readiness, and completion proof
-    - topic: roles
-      decision: flat model with anonymous visitor and authenticated learner; no administrator role in MVP
-    - topic: completion sharing
-      decision: public completion link, LinkedIn sharing, and link copying are must-have; generated badge image is nice-to-have
-    - topic: authentication utility
-      decision: authentication provides the technical identity required to authorize an Academy Pi profile, submit checkpoint results, store private progress, synchronize devices, and publish completion proof
-    - topic: product philosophy
-      decision: optimize for learner autonomy, useful learning, and enjoyment; never treat signup conversion as a product goal or use coercive gates
-    - topic: MVP guardrails
-      decision: preserve public access to all educational content; account requirements protect verified progress rather than gate knowledge; public completion proof must not expose email or detailed progress
-    - topic: final curriculum capability
-      decision: an autonomous multi-agent PR gauntlet performs implementation, independent reviews, corrections, verification, approval, and merge without a human in the execution loop
-    - topic: final gauntlet environment
-      decision: the required checkpoint runs in a controlled training repository; after completion the learner may optionally run the same mission in their own repository
-    - topic: curriculum learning pattern
-      decision: hybrid progression — activate a reviewed capability quickly, inspect and modify it, then build original capabilities and compose them into an autonomous system
-    - topic: twelve-step curriculum arc
-      decision: capability-first Hitchcock arc from The Heist through autonomous multi-agent PR Gauntlet; exact scope and checkpoints are locked in curriculum.md
-    - topic: initial target scale
-      decision: design the first working version for up to 10,000 users; request rate and data-volume ballparks remain open
-    - topic: delivery constraint
-      decision: one week of after-hours work with a hard deadline of 2026-09-14
-    - topic: experience direction
-      decision: Pi Mission Control — Pi.dev visual restraint, Lakera-style scenario escalation, Advent of Code reveals, and CodeCrafters/GitHub Skills verification; monochrome hierarchy with subtle brutalist structure and color reserved for state
-    - topic: application stack
-      decision: Hono as a thin Cloudflare Workers HTTP layer, server-rendered HTML, small vanilla TypeScript enhancements, D1, Email Sending, opaque cookie sessions, and no client-side application framework
-  frs_drafted: 11
-  quality_check_status: accepted
 ---
 
-# Pi Harness Academy — Shape Notes
+# Pi Harness Academy — Product Requirements Document
 
 ## Vision & Problem Statement
 
-Developers moving from Claude Code or Codex to Pi want control over what their coding harness loads and how it behaves. Their current harness can impose tools, policies, features, and context they do not need; high cold-start token overhead is the most visible symptom, while unpredictable context cost, workflow rigidity, and ecosystem dependence are broader costs.
+Developers moving from Claude Code or Codex to Pi want control over what their coding harness loads and how it behaves. Their current harness can impose tools, policies, features, and context they do not need; high cold-start token overhead is the most visible symptom, while unpredictable context cost, workflow rigidity, and ecosystem dependence are broader costs. Today they either accept the defaults of their existing harness, patch behavior through scattered configuration, or reconstruct a Pi setup directly from separate documentation pages. This costs time, produces inconsistent setups, and risks omitting safeguards when moving to Pi's deliberately minimal defaults.
 
-Pi provides a minimal, extensible core rather than a complete, guarded workflow. The opportunity is not minimalism alone: developers need a guided path for selectively adding the capabilities and safety boundaries they actually need without recreating the same uncontrolled overhead they are leaving behind.
-
-Today they either accept the defaults of their existing harness, patch behavior through scattered configuration, or reconstruct a Pi setup directly from separate documentation pages. This costs time, produces inconsistent setups, and risks omitting safeguards when moving to Pi's deliberately minimal defaults.
-
-The product exists to help people learn Pi, use it, and enjoy the experience. It does not optimize for account conversion. All educational content remains public. Authentication supplies the technical identity needed for verified checkpoints, private progress, device synchronization, and completion proof; sharing is an optional invitation to help someone else have the same experience.
+Pi provides a minimal, extensible core rather than a complete, guarded workflow. The opportunity is not minimalism alone: developers need a guided path for selectively adding the capabilities and safety boundaries they actually need without recreating the same uncontrolled overhead they are leaving behind. The product exists to help people learn Pi, use it, and enjoy the experience; it does not optimize for account conversion.
 
 ## User & Persona
 
 The primary persona is a developer already using Claude Code or Codex who wants to move to Pi for greater control over context, models, tools, and workflow. They reach for Pi Harness Academy when they notice harness overhead or rigidity, but do not yet know what to configure, in what order, or how to retain necessary guardrails.
-
-## Access Control
-
-An anonymous visitor can read all lesson content and mission instructions. Anonymous visitors cannot submit verified checkpoint results, create private progress records, receive account-backed readiness, or publish completion proof.
-
-Passwordless email authentication creates a learner account. The learner authorizes an isolated Academy Pi profile through a device flow. The companion extension may open the system browser without requiring a browser-automation extension; it always displays a URL and short code as a fallback. The resulting revocable device credential is scoped to Academy operations and is unrelated to model-provider credentials.
-
-The MVP uses a flat access model: anonymous visitor and authenticated learner. It has no administrator role. An authenticated learner can create, read, update, and delete only their own private progress. Every private progress operation enforces ownership at the data boundary. Authorized Academy profiles can submit only allowlisted checkpoint results for that learner.
-
-An authenticated learner who completes the path can create a public completion link and prepared LinkedIn share copy. A generated badge image is a nice-to-have after the core definition of done. The public completion view exposes only an identity deliberately selected by the learner and the fact of completion; it never exposes the learner's email address or detailed progress.
 
 ## Success Criteria
 
@@ -95,36 +42,6 @@ An authenticated learner who completes the path can create a public completion l
 
 - All 12 steps and mission instructions remain publicly readable; account requirements protect verified progress and device submissions rather than gate educational content.
 - Public completion proof exposes neither the learner's email address nor detailed progress; it shows only deliberately selected identity information and the fact of completion.
-
-### First Complete User Flow
-
-1. The developer opens the public homepage and can inspect the promise, the 12-step path, and every lesson without authenticating.
-2. To begin the verified journey, they authenticate through passwordless email.
-3. They authorize the isolated Academy Pi profile through a browser-based device flow.
-4. They perform the mission and invoke the companion checkpoint command.
-5. The companion runs allowlisted checks and submits a minimal result for the authenticated learner.
-6. The product displays pass or fail; a pass updates readiness, unlocks the next tracked step, and recommends the next action.
-7. The learner repeats the flow through all 12 steps with synchronized private progress.
-8. After completion, the learner receives a completion badge, a public proof link, and prepared LinkedIn sharing.
-
-## Curriculum Scope
-
-The required 12-step curriculum and completion checkpoint for each step are defined in `context/foundation/curriculum.md`:
-
-1. The Heist
-2. X-Ray Vision
-3. Eyes & Hands
-4. The Time Machine
-5. Total Recall
-6. Hindsight
-7. The Forge
-8. Clone Protocol
-9. Council of Minds
-10. The Crew
-11. Escape the Terminal
-12. The Gauntlet
-
-The sequence is cumulative and runs in an isolated Academy profile. The final required mission uses a controlled training repository; running the same autonomous workflow against the learner's own repository is optional.
 
 ## User Stories
 
@@ -187,14 +104,6 @@ The sequence is cumulative and runs in an isolated Academy profile. The final re
 - FR-011: A completed learner can generate a downloadable completion badge image. Priority: nice-to-have
   > Socratic: Image generation can consume deadline capacity without strengthening the required learning or verification flow. Resolution: keep it explicitly nice-to-have and ship it only after all must-have acceptance criteria pass.
 
-## Business Logic
-
-Academy advances a learner only when an authorized Pi profile submits a valid result proving every required check for an eligible mission; progress, readiness, the next recommendation, and permission to publish completion proof derive from the resulting set of verified capabilities.
-
-The rule consumes the learner's authorized profile identity, the current eligible mission, and the minimal result of each allowlisted companion check. A submission fails when authorization, eligibility, result validity, or any required check is missing. Repeated valid submissions are idempotent and cannot downgrade completed capabilities.
-
-A passing result records the verified capability and makes the next tracked mission eligible. Readiness represents the transparent share of required capabilities verified so far, while the recommendation identifies the next eligible missing capability. Completion proof becomes publishable only after all 12 required mission capabilities are verified.
-
 ## Non-Functional Requirements
 
 - After a companion result reaches the service, the learner sees acknowledgement in less than 2 seconds at p95.
@@ -203,6 +112,24 @@ A passing result records the verified capability and makes the next tracked miss
 - Deleting progress or revoking completion proof changes the public proof state in less than 10 seconds.
 - The primary learning flow remains usable on the latest two major versions of Chrome, Firefox, Safari, and Edge, including mobile viewport sizes.
 - Every essential learning and authentication action is operable by keyboard.
+
+## Business Logic
+
+Academy advances a learner only when an authorized Pi profile submits a valid result proving every required check for an eligible mission; progress, readiness, the next recommendation, and permission to publish completion proof derive from the resulting set of verified capabilities.
+
+The rule consumes the learner's authorized profile identity, the current eligible mission, and the minimal result of each allowlisted companion check. A submission fails when authorization, eligibility, result validity, or any required check is missing. Repeated valid submissions are idempotent and cannot downgrade completed capabilities.
+
+A passing result records the verified capability and makes the next tracked mission eligible. Readiness represents the transparent share of required capabilities verified so far, while the recommendation identifies the next eligible missing capability. Completion proof becomes publishable only after all 12 required mission capabilities are verified.
+
+## Access Control
+
+An anonymous visitor can read all lesson content and mission instructions. Anonymous visitors cannot submit verified checkpoint results, create private progress records, receive account-backed readiness, or publish completion proof.
+
+Passwordless email authentication creates a learner account. The learner authorizes an isolated Academy Pi profile through a device flow. The companion extension may open the system browser without requiring a browser-automation extension; it always displays a URL and short code as a fallback. The resulting revocable device credential is scoped to Academy operations and is unrelated to model-provider credentials.
+
+The MVP uses a flat access model: anonymous visitor and authenticated learner. It has no administrator role. An authenticated learner can create, read, update, and delete only their own private progress. Every private progress operation enforces ownership at the data boundary. Authorized Academy profiles can submit only allowlisted checkpoint results for that learner.
+
+An authenticated learner who completes the path can create a public completion link and prepared LinkedIn share copy. A generated badge image is a nice-to-have after the core definition of done. The public completion view exposes only an identity deliberately selected by the learner and the fact of completion; it never exposes the learner's email address or detailed progress.
 
 ## Non-Goals
 
@@ -223,18 +150,3 @@ A passing result records the verified capability and makes the next tracked miss
 3. **What expiry, rotation, and local-storage policy protects Academy device credentials?** — Resolve during security and stack design before implementing device authorization.
 4. **Which deterministic checks and minimal result fields validate each of the 12 missions?** — Resolve step by step before curriculum implementation; no check may transmit prohibited content.
 5. **Which delivery behavior and retry path make passwordless authentication reliable enough for launch?** — Resolve and test before the authenticated flow is considered complete.
-
-## Forward: Tech Stack
-
-The selected stack must support a public web application plus a distributable Pi companion package containing an extension command and supporting skill. It must support passwordless accounts, browser-based device authorization, revocable scoped device credentials, private progress CRUD, cross-device synchronization, short-lived checkpoint submissions, public completion proof, and the target of up to 10,000 users. Implementation remains constrained to one week of after-hours work ending 2026-09-14.
-
-## Quality Cross-Check
-
-- Access control: present — public knowledge, authenticated private progress, authorized companion profiles, and public proof boundaries are explicit.
-- Business logic: present — one declarative advancement rule connects verified capabilities to progress, readiness, recommendation, and proof.
-- Project artifacts: present — checkpoint frontmatter and the complete shaping record are valid.
-- Timeline-cost acknowledgement: present — the MVP is constrained to one week of after-hours work with a fixed deadline.
-- Non-goals: present — functional and quality exclusions are explicit.
-- Preserved behavior: n/a — greenfield project.
-
-Quality gate accepted with unresolved implementation questions routed to `## Open Questions` rather than guessed.

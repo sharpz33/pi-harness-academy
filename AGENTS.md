@@ -1,36 +1,36 @@
-# Pi Harness Academy
+# Repository Guidelines
 
-## Start here
+Pi Harness Academy is a TypeScript application built with Hono for Cloudflare Workers. It serves public course content and verifies progress from an isolated Pi Academy profile.
 
-Read these files before changing product behavior:
+## Critical product and safety rules
 
-1. `context/foundation/shape-notes.md`
-2. `context/foundation/curriculum.md`
-3. Relevant research under `context/foundation/`
+- Keep every lesson and mission instruction publicly readable. Authentication may gate verified checkpoints, private progress, readiness, synchronization, and completion proof, but never the knowledge itself.
+- Require both an authenticated learner and an authorized Academy Pi profile for verified checkpoints. Fail closed when identity, authorization, evidence, or a required check is missing.
+- Keep the 12-step curriculum capability-first and cumulative. Represent steps as data rendered by one shared lesson engine; badge images remain optional until all must-have flows pass.
+- Preserve the isolated Academy profile. Never modify a learner's normal Pi profile or source Claude Code, Codex, or Pi configuration.
+- Checkpoint reports may contain only allowlisted results. Never collect file contents, prompts, paths, environment values, secrets, private transcripts, or unrelated machine data.
+- Never commit credentials, tokens, `.env` files, licensed course materials, or private customer data. Keep `.ai/` untracked.
+- Review and pin every third-party Pi package before recommending or executing it.
+- Do not create Cloudflare resources or run a production deployment without explicit approval.
 
-## Product rules
+## Commands and quality loop
 
-- Keep all lesson content and mission instructions publicly readable.
-- Require an authenticated learner and authorized Academy Pi profile for verified checkpoints, private progress, readiness, synchronization, and completion proof.
-- Optimize for useful learning, learner autonomy, and enjoyment—not account conversion.
-- Never introduce coercive sign-in gates or dark patterns.
-- Keep the 12-step curriculum capability-first and cumulative.
-- Treat curriculum steps as data rendered by one shared lesson engine.
-- Preserve the isolated Academy profile model; never modify a learner's normal Pi profile or source harness configuration.
-- Do not collect file contents, prompts, environment values, secrets, private session transcripts, or unrelated machine data in checkpoint reports.
-- Treat generated badge images as nice-to-have until every must-have flow passes.
+- `npm install` — install project dependencies.
+- `npm run dev` — run the Worker locally with Wrangler.
+- `npm run cf-typegen` — regenerate `CloudflareBindings` after changing Worker bindings.
+- `npm run deploy -- --dry-run` — validate the deployment bundle without publishing.
+- `npm run check` — run typechecking, tests, and the deployment dry-run.
+- `npm audit` — check the dependency graph for known vulnerabilities.
 
-## Safety
+The same quality gate runs in `@.github/workflows/ci.yml`. Do not report it as passing unless every command completes successfully.
 
-- Never commit secrets, credentials, tokens, `.env` files, licensed course materials, or private customer data.
-- Keep local course tooling under `.ai/` untracked.
-- Review and pin third-party Pi packages before recommending or executing them.
-- Fail closed when checkpoint identity, authorization, evidence, or required verification is missing.
+## Structure and sources of truth
 
-## Working style
+- `@src/index.ts` is the current Worker entry point; `@wrangler.jsonc` owns Worker configuration.
+- Read `@context/foundation/shape-notes.md`, `@context/foundation/prd.md`, `@context/foundation/curriculum.md`, and `@context/foundation/tech-stack.md` before changing product behavior.
+- Use `@context/foundation/experience-design-research.md` for UX direction and research files for supporting evidence rather than copying them here.
+- D1, Email Sending, public remote, and CI are not configured yet. Do not assume bindings or deployed infrastructure exist.
 
-- Code, identifiers, code comments, and commits are in English.
-- Keep changes minimal and scoped.
-- Do not modify unrelated worktree changes.
-- Do not use destructive Git operations without explicit approval.
-- Record unknown product decisions instead of inventing them.
+## Working conventions
+
+Write code, identifiers, code comments, and commits in English. Use imperative commit subjects without `Co-Authored-By` trailers. Do not modify unrelated worktree changes or use destructive Git operations without explicit approval. Record unresolved product decisions instead of inventing facts.
