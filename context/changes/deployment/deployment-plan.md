@@ -41,15 +41,15 @@ Approval of this plan authorizes local preparation only. Public repository creat
 
 ## Phase 2 — Public GitHub Repository
 
-- [ ] Show the exact publication set and verify that `.ai/`, environment files, credentials, and generated local files are absent.
-- [ ] Ask for explicit approval to create the public repository.
-- [ ] Create `sharpz33/pi-harness-academy` as public and add it as `origin`.
-- [ ] Push `main` and verify repository visibility, default branch, and CI status.
-- [ ] Configure branch protection or rules so the CI check is required before merge.
+- [x] Show the exact publication set and verify that `.ai/`, environment files, credentials, and generated local files are absent.
+- [x] Ask for explicit approval to create the public repository.
+- [x] Create `sharpz33/pi-harness-academy` as public and add it as `origin`.
+- [x] Push `main` and verify repository visibility, default branch, and CI status.
+- [x] Configure branch protection or rules so the CI check is required before merge.
 
 ## Phase 3 — First Production Deployment
 
-- [ ] Add a production deployment workflow triggered manually with `workflow_dispatch`.
+- [x] Add a production deployment workflow triggered manually with `workflow_dispatch`.
 - [ ] Store only `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in GitHub Actions secrets; never print their values.
 - [ ] Record the exact commit selected for deployment and confirm the Worker name and account.
 - [ ] Run and show the final deployment dry-run.
