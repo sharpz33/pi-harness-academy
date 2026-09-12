@@ -7,7 +7,7 @@ target_scale:
   qps: unknown
   data_volume: unknown
 created: 2026-09-10
-updated: 2026-09-10
+updated: 2026-09-11
 timeline_budget:
   mvp_weeks: 1
   hard_deadline: 2026-09-14
@@ -30,6 +30,8 @@ checkpoint:
       decision: public completion link, LinkedIn sharing, and link copying are must-have; generated badge image is nice-to-have
     - topic: authentication utility
       decision: authentication provides the technical identity required to authorize an Academy Pi profile, submit checkpoint results, store private progress, synchronize devices, and publish completion proof
+    - topic: Pi profile strategy
+      decision: fresh Pi users may use the default profile; learners with existing Pi configuration are offered a separate Academy profile; the selected profile becomes the cumulative authorized journey target
     - topic: product philosophy
       decision: optimize for learner autonomy, useful learning, and enjoyment; never treat signup conversion as a product goal or use coercive gates
     - topic: MVP guardrails
@@ -74,7 +76,7 @@ The primary persona is a developer already using Claude Code or Codex who wants 
 
 An anonymous visitor can read all lesson content and mission instructions. Anonymous visitors cannot submit verified checkpoint results, create private progress records, receive account-backed readiness, or publish completion proof.
 
-Passwordless email authentication creates a learner account. The learner authorizes an isolated Academy Pi profile through a device flow. The companion extension may open the system browser without requiring a browser-automation extension; it always displays a URL and short code as a fallback. The resulting revocable device credential is scoped to Academy operations and is unrelated to model-provider credentials.
+Passwordless email authentication creates a learner account. The learner authorizes the Pi profile selected for their Academy journey through a device flow. A fresh Pi user may use the default profile; a learner with existing Pi configuration is offered a separate Academy profile. The companion extension may open the system browser without requiring a browser-automation extension; it always displays a URL and short code as a fallback. The resulting revocable device credential is scoped to Academy operations and is unrelated to model-provider credentials. Model-provider authentication happens directly inside Pi and the Academy service never requests or imports those credentials.
 
 The MVP uses a flat access model: anonymous visitor and authenticated learner. It has no administrator role. An authenticated learner can create, read, update, and delete only their own private progress. Every private progress operation enforces ownership at the data boundary. Authorized Academy profiles can submit only allowlisted checkpoint results for that learner.
 
@@ -85,7 +87,7 @@ An authenticated learner who completes the path can create a public completion l
 ### Primary
 
 - An authenticated learner with an authorized Academy Pi profile can complete all 12 steps through validated companion checks; each successful checkpoint updates readiness, unlocks the correct next step, and produces a next-action recommendation.
-- A learner can authenticate through passwordless email, synchronize isolated progress, and after completing the path create and share public completion proof through a copied link or prepared LinkedIn action.
+- A learner can authenticate through passwordless email, synchronize private progress, and after completing the path create and share public completion proof through a copied link or prepared LinkedIn action.
 
 ### Secondary
 
@@ -100,7 +102,7 @@ An authenticated learner who completes the path can create a public completion l
 
 1. The developer opens the public homepage and can inspect the promise, the 12-step path, and every lesson without authenticating.
 2. To begin the verified journey, they authenticate through passwordless email.
-3. They authorize the isolated Academy Pi profile through a browser-based device flow.
+3. They authorize the Pi profile selected for their Academy journey through a browser-based device flow.
 4. They perform the mission and invoke the companion checkpoint command.
 5. The companion runs allowlisted checks and submits a minimal result for the authenticated learner.
 6. The product displays pass or fail; a pass updates readiness, unlocks the next tracked step, and recommends the next action.
@@ -124,15 +126,15 @@ The required 12-step curriculum and completion checkpoint for each step are defi
 11. Escape the Terminal
 12. The Gauntlet
 
-The sequence is cumulative and runs in an isolated Academy profile. The final required mission uses a controlled training repository; running the same autonomous workflow against the learner's own repository is optional.
+The sequence is cumulative in the learner's selected Pi profile. Fresh Pi users may use the default profile; learners with existing Pi configuration are offered a separate Academy profile. The final required mission uses a controlled training repository; running the same autonomous workflow against the learner's own repository is optional.
 
 ## User Stories
 
 ### US-01: Complete the path and publish completion proof
 
 - **Given** a first-time visitor who can inspect the full curriculum publicly
-- **When** they authenticate through passwordless email, authorize their isolated Academy Pi profile, complete the companion-validated checkpoints across all 12 steps, and finish the final mission
-- **Then** the correct tracked steps unlock in sequence, readiness and the next recommendation remain current, progress synchronizes in an isolated learner account, and the learner can publish and share completion proof
+- **When** they authenticate through passwordless email, authorize the Pi profile selected for their Academy journey, complete the companion-validated checkpoints across all 12 steps, and finish the final mission
+- **Then** the correct tracked steps unlock in sequence, readiness and the next recommendation remain current, progress synchronizes in their private learner account, and the learner can publish and share completion proof
 
 #### Acceptance Criteria
 
@@ -162,8 +164,8 @@ The sequence is cumulative and runs in an isolated Academy profile. The final re
   > Socratic: Considered that anonymous completion cannot be reliably attributed to a person. Resolution: keep knowledge public while requiring authentication only for verified checkpoint submission, private progress, readiness, and attributable public proof. Account conversion is not a product objective.
 - FR-002: An authenticated learner can create, view, update, and delete only their own private step progress. Priority: must-have
   > Socratic: Considered that destructive deletion can erase hours of work and invalidate public proof. Resolution: omit course restart; require an explicit destructive decision for deletion, scope it to the learner's own data, and revoke associated public proof. External copies already shared remain outside the product's control.
-- FR-003: An authenticated learner can authorize and revoke an isolated Academy Pi profile through a browser-based device flow without manually managing an API key. Priority: must-have
-  > Socratic: A stolen persistent device credential could submit results as the learner. Resolution: credentials are scoped to Academy checkpoint operations, revocable per profile, and never reused as model-provider credentials; expiry and secure local storage remain implementation requirements.
+- FR-003: An authenticated learner can authorize and revoke the Pi profile selected for their Academy journey through a browser-based device flow without manually managing an API key. Priority: must-have
+  > Socratic: A fresh Pi user does not need a second profile, while an existing Pi user may need to protect a working setup. Resolution: the default profile is allowed for a fresh setup, a separate Academy profile is offered when existing Pi configuration needs protection, and the selected profile receives a revocable credential scoped only to Academy checkpoint operations.
 - FR-004: An authorized Academy Pi profile can run allowlisted, step-specific checks and submit only the minimal result required for checkpoint validation. Priority: must-have
   > Socratic: A learner controls the local machine and can modify the verifier, so local results cannot be treated as high-trust certification. Resolution: describe checks as educational evidence, execute only bundled allowlisted checks, disclose submitted fields, and never collect file contents, paths, prompts, environment values, or secrets.
 - FR-005: A learner can receive an explicit pass or fail result for every submitted checkpoint. Priority: must-have
@@ -175,7 +177,7 @@ The sequence is cumulative and runs in an isolated Academy profile. The final re
 
 - FR-007: A visitor can authenticate through a passwordless email flow. Priority: must-have
   > Socratic: Delivery failure could block the entire verified path even though the content is public. Resolution: preserve public reading, retain the learner's place during authentication, provide explicit retry and expiry feedback, and treat deliverability as a launch risk requiring testing.
-- FR-008: An authenticated learner can synchronize their isolated private progress across devices. Priority: must-have
+- FR-008: An authenticated learner can synchronize their private Academy progress across devices. Priority: must-have
   > Socratic: Concurrent devices can submit stale or duplicate checkpoint state. Resolution: make valid completion monotonic and idempotent; repeated or older submissions cannot downgrade a completed step, while deletion remains a separate explicit operation.
 
 ### Completion proof and sharing

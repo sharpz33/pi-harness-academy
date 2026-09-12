@@ -1,13 +1,13 @@
 # Repository Guidelines
 
-Pi Harness Academy is a TypeScript application built with Hono for Cloudflare Workers. It serves public lessons and verifies progress from an isolated Academy profile.
+Pi Harness Academy is a TypeScript Hono Worker serving public lessons and verifying progress from a authorized Pi profile.
 
 ## Critical product and safety rules
 
 - Keep every lesson and mission instruction publicly readable. Authentication may gate verified checkpoints, private progress, readiness, synchronization, and completion proof, but never the knowledge itself.
 - Require both an authenticated learner and an authorized Academy Pi profile for verified checkpoints. Fail closed when identity, authorization, evidence, or a required check is missing.
 - Keep the 12-step curriculum capability-first and cumulative. Represent steps as data rendered by one shared lesson engine; badge images remain optional until all must-have flows pass.
-- Preserve the isolated Academy profile. Never modify a learner's normal Pi profile or source Claude Code, Codex, or Pi configuration.
+- Never modify a learner's Claude Code or Codex source configuration. Fresh Pi users may use the default profile; offer an Academy profile when existing Pi configuration needs protection.
 - Checkpoint reports may contain only allowlisted results. Never collect file contents, prompts, paths, environment values, secrets, private transcripts, or unrelated machine data.
 - Never commit credentials, tokens, `.env` files, licensed course materials, or private customer data. Keep `.ai/` untracked.
 - Review and pin every third-party Pi package before recommending or executing it.

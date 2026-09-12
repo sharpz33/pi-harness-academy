@@ -4,7 +4,7 @@ version: 1
 status: active
 created: 2026-09-11
 updated: 2026-09-11
-prd_version: 1
+prd_version: 2
 main_goal: speed
 top_blocker: time
 milestone_id: complete-verified-academy-journey
@@ -14,7 +14,7 @@ milestone_status: open
 
 # Roadmap: Pi Harness Academy
 
-> Derived from `context/foundation/prd.md` v1, `context/foundation/curriculum.md`, and the automatically inspected codebase.
+> Derived from `context/foundation/prd.md` v2, `context/foundation/curriculum.md`, and the automatically inspected codebase.
 > Edit in place; archive when superseded.
 > Items are listed in dependency order. The At a glance table is the index.
 
@@ -23,13 +23,13 @@ milestone_status: open
 **M-1: Complete verified Academy journey** — Status: open
 
 - **Goal:** Deliver the complete public twelve-mission path, account-backed progress, companion verification, and privacy-preserving completion sharing.
-- **Source materials:** `context/foundation/prd.md` v1 and `context/foundation/curriculum.md`.
+- **Source materials:** `context/foundation/prd.md` v2 and `context/foundation/curriculum.md`.
 - **Done when:** every F-NN and S-NN below is `done`, every required mission is publicly readable, and the complete verified journey passes its acceptance checks.
 - **Scope anchors:** US-01–US-02 and FR-001–FR-010. FR-011 remains optional and parked.
 
 ## Vision recap
 
-Developers moving from more prescriptive coding harnesses need a guided way to assemble only the Pi capabilities and safeguards they choose. The Academy keeps all knowledge public while using an isolated profile, minimal evidence, and private synchronized progress to make the twelve-step journey verifiable without turning signup into the product goal.
+Developers moving from more prescriptive coding harnesses need a guided way to assemble only the Pi capabilities and safeguards they choose. The Academy keeps all knowledge public while using a learner-selected Pi profile, minimal evidence, and private synchronized progress to make the twelve-step journey verifiable without turning signup into the product goal.
 
 ## North star
 
@@ -41,9 +41,9 @@ A north star is the smallest end-to-end result that proves the product's central
 
 | ID | Change ID | Outcome (user can …) | Prerequisites | PRD refs | Status |
 | --- | --- | --- | --- | --- | --- |
-| S-01 | public-heist-mission | read and perform the complete public The Heist mission | — | US-01, FR-001 | planning |
+| S-01 | public-heist-mission | read and perform the complete public The Heist mission | — | US-01, FR-001 | in-progress |
 | S-02 | passwordless-learner-entry | authenticate by email and see their own verified-journey starting state | — | US-01, US-02, FR-007 | blocked |
-| S-03 | academy-profile-authorization | authorize and revoke one isolated Academy Pi profile | S-02 | US-01, FR-003 | blocked |
+| S-03 | academy-profile-authorization | authorize and revoke the Pi profile selected for the Academy journey | S-02 | US-01, FR-003 | blocked |
 | S-04 | first-verified-checkpoint | receive pass or fail for The Heist and unlock X-Ray Vision only after valid evidence | S-01, S-02, S-03 | US-01, FR-004, FR-005, FR-006 | blocked |
 | S-05 | private-progress-sync | view, update, delete, and resume only their own synchronized progress | S-04 | US-02, FR-002, FR-008 | proposed |
 | S-06 | verified-act-one | complete verified missions 2–4 with current readiness and recommendations | S-05 | US-01, FR-001, FR-004, FR-005, FR-006 | blocked |
@@ -79,7 +79,7 @@ No separate foundation is justified yet. Data, authentication, and evidence cont
 
 ### S-01: Public The Heist mission
 
-- **Outcome:** A visitor can read the complete The Heist lesson, perform its isolated-profile mission, and understand the checkpoint evidence without signing in.
+- **Outcome:** A visitor can read the complete The Heist lesson, perform it in a fresh default or optional Academy profile, and understand the checkpoint evidence without signing in.
 - **Change ID:** public-heist-mission
 - **PRD refs:** US-01, FR-001
 - **Prerequisites:** —
@@ -87,7 +87,7 @@ No separate foundation is justified yet. Data, authentication, and evidence cont
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** The lesson must produce an authentic Pi capability rather than becoming static documentation with no executable mission.
-- **Status:** planning
+- **Status:** in-progress
 
 ### S-02: Passwordless learner entry
 
@@ -104,7 +104,7 @@ No separate foundation is justified yet. Data, authentication, and evidence cont
 
 ### S-03: Isolated Academy profile authorization
 
-- **Outcome:** An authenticated learner can authorize and revoke one isolated Academy Pi profile without handling an API key manually.
+- **Outcome:** An authenticated learner can authorize and revoke the Pi profile selected for their Academy journey without handling an API key manually.
 - **Change ID:** academy-profile-authorization
 - **PRD refs:** US-01, FR-003
 - **Prerequisites:** S-02
@@ -210,7 +210,7 @@ No separate foundation is justified yet. Data, authentication, and evidence cont
 | --- | --- | --- | --- | --- |
 | S-01 | public-heist-mission | Deliver the complete public The Heist mission | yes | First ready vertical slice. |
 | S-02 | passwordless-learner-entry | Let a learner enter through passwordless email | no | Resolve delivery and retry behavior first. |
-| S-03 | academy-profile-authorization | Authorize and revoke an isolated Academy profile | no | Resolve device credential policy first. |
+| S-03 | academy-profile-authorization | Authorize and revoke the selected Academy journey profile | no | Resolve device credential policy first. |
 | S-04 | first-verified-checkpoint | Verify The Heist and unlock X-Ray Vision | no | Resolve the minimal The Heist evidence contract first. |
 | S-05 | private-progress-sync | Synchronize learner-owned progress safely | no | Requires S-04. |
 | S-06 | verified-act-one | Deliver verified missions 2–4 | no | Define checks after the first checkpoint contract is proven. |

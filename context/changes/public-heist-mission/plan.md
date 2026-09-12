@@ -283,11 +283,11 @@ There is no data migration. Existing homepage URLs remain valid. The first missi
 
 #### Automated
 
-- [ ] 1.1 Verify exactly twelve ordered mission records with unique slugs
-- [ ] 1.2 Verify The Heist includes Launch Bay, approval boundaries, four evidence items, and official sources
-- [ ] 1.3 Verify prompt tests cover prohibited categories, approval stops, untrusted content, native activation, and narrow copy scope
-- [ ] 1.4 Pass typechecking and unit tests
-- [ ] 1.5 Keep AGENTS.md within 400 words
+- [x] 1.1 Verify exactly twelve ordered mission records with unique slugs
+- [x] 1.2 Verify The Heist includes Launch Bay, approval boundaries, four evidence items, and official sources
+- [x] 1.3 Verify prompt tests cover prohibited categories, approval stops, untrusted content, native activation, and narrow copy scope
+- [x] 1.4 Pass typechecking and unit tests
+- [x] 1.5 Keep AGENTS.md within 400 words
 
 #### Manual
 
