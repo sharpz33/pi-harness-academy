@@ -316,15 +316,15 @@ There is no data migration. Existing homepage URLs remain valid. The first missi
 
 #### Automated
 
-- [x] 3.1 Pass a clean lockfile install
-- [x] 3.2 Pass the complete quality gate
-- [x] 3.3 Pass the dependency audit
-- [x] 3.4 Pass diff validation
-- [x] 3.5 Pass publication scan with no sensitive artifacts
+- [x] 3.1 Pass a clean lockfile install — b75424a
+- [x] 3.2 Pass the complete quality gate — b75424a
+- [x] 3.3 Pass the dependency audit — b75424a
+- [x] 3.4 Pass diff validation — b75424a
+- [x] 3.5 Pass publication scan with no sensitive artifacts — b75424a
 
 #### Manual
 
 - [ ] 3.6 Verify inventory and both approval stops against disposable Claude-style and Codex-style fixtures
 - [ ] 3.7 Verify a self-contained fixture activates or copies while its source stays byte-for-byte unchanged
-- [x] 3.8 Verify final desktop and mobile layouts with keyboard navigation
+- [x] 3.8 Verify final desktop and mobile layouts with keyboard navigation — b75424a
 - [ ] 3.9 Approve the final publication diff
