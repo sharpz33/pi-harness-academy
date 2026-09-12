@@ -22,25 +22,34 @@ describe('mission catalog', () => {
 describe('The Heist staged prompt', () => {
   const prompt = heistMission.prompt ?? ''
 
-  it('fails closed around private and executable resources', () => {
+  it('fails closed around credential, session, and symlink roots', () => {
+    const forbiddenRoots = ['.credentials.json', 'projects/', 'auth.json', 'history.jsonl']
+
     expect(prompt).toContain('untrusted data')
-    expect(prompt).toContain('credentials')
-    expect(prompt).toContain('sessions')
-    expect(prompt).toContain('MCP')
-    expect(prompt).toContain('hooks')
-    expect(prompt).toContain('symlink')
-    expect(prompt).toContain('Claude Code candidates: skills/ and commands/')
-    expect(prompt).toContain('Codex candidates: .agents/skills')
-    expect(prompt).toContain('Treat auth.json and history.jsonl as forbidden roots')
+    expect(prompt).toContain('Never descend into credential or session directories')
     expect(prompt).toContain('do not guess or search for undocumented session locations')
+    expect(prompt).toContain('Do not follow symlinks')
     expect(prompt).toContain('fail closed')
+    forbiddenRoots.forEach((root) => expect(prompt).toContain(root))
   })
 
-  it('requires staged consent and keeps provider authentication outside Academy', () => {
-    expect(prompt).toContain('STOP 1')
-    expect(prompt).toContain('STOP 2')
+  it('quarantines executable and dependent resources', () => {
+    const quarantinedResources = ['MCP', 'hooks', 'plugins', 'packages', 'extensions', 'scripts', 'imports']
+
+    expect(prompt).toContain('self-contained')
+    expect(prompt).toContain('regular Markdown file')
+    expect(prompt).toContain('references sibling files')
+    quarantinedResources.forEach((resource) => expect(prompt).toContain(resource))
+  })
+
+  it('requires both approval stops in sequence', () => {
+    const firstStop = prompt.indexOf('STOP 1')
+    const secondStop = prompt.indexOf('STOP 2')
+
+    expect(firstStop).toBeGreaterThan(0)
+    expect(secondStop).toBeGreaterThan(firstStop)
+    expect(prompt).toContain('Do nothing else until I answer')
     expect(prompt).toContain('Do not invoke or copy anything until I answer')
-    expect(prompt).toContain('model-provider authentication')
     expect(prompt).toContain('Never ask me to paste a provider key')
   })
 
@@ -58,5 +67,6 @@ describe('The Heist staged prompt', () => {
     expect(prompt).toContain('source_unchanged: true or false')
     expect(prompt).toContain('Do not print or transmit the digest')
     expect(prompt).toContain('Do not send inventory, file contents, paths, or digests')
+    expect(prompt).toContain('Leave the source untouched')
   })
 })

@@ -298,33 +298,33 @@ There is no data migration. Existing homepage URLs remain valid. The first missi
 
 #### Automated
 
-- [x] 2.1 Verify The Heist returns public HTML with the complete lesson contract
-- [x] 2.2 Verify the homepage links The Heist and still lists twelve missions
-- [x] 2.3 Verify unknown mission slugs return 404
-- [x] 2.4 Verify the client script Content-Type and absence of persistence or network calls
-- [x] 2.5 Verify existing CSP and security headers remain intact
-- [x] 2.6 Pass the complete local quality gate
+- [x] 2.1 Verify The Heist returns public HTML with the complete lesson contract — 00b86b4
+- [x] 2.2 Verify the homepage links The Heist and still lists twelve missions — 00b86b4
+- [x] 2.3 Verify unknown mission slugs return 404 — 00b86b4
+- [x] 2.4 Verify the client script Content-Type and absence of persistence or network calls — 00b86b4
+- [x] 2.5 Verify existing CSP and security headers remain intact — 00b86b4
+- [x] 2.6 Pass the complete local quality gate — 00b86b4
 
 #### Manual
 
-- [x] 2.7 Verify lesson navigation and copy interactions using keyboard only
-- [x] 2.8 Verify the Clipboard API fallback leaves copyable text and clear feedback
-- [x] 2.9 Verify local evidence appears only after four checks and resets on refresh
-- [x] 2.10 Accept desktop and mobile mission layouts without a fake terminal
+- [x] 2.7 Verify lesson navigation and copy interactions using keyboard only — 00b86b4
+- [x] 2.8 Verify the Clipboard API fallback leaves copyable text and clear feedback — 00b86b4
+- [x] 2.9 Verify local evidence appears only after four checks and resets on refresh — 00b86b4
+- [x] 2.10 Accept desktop and mobile mission layouts without a fake terminal — 00b86b4
 
 ### Phase 3: Harden Safety, Documentation, and Release Evidence
 
 #### Automated
 
-- [ ] 3.1 Pass a clean lockfile install
-- [ ] 3.2 Pass the complete quality gate
-- [ ] 3.3 Pass the dependency audit
-- [ ] 3.4 Pass diff validation
-- [ ] 3.5 Pass publication scan with no sensitive artifacts
+- [x] 3.1 Pass a clean lockfile install
+- [x] 3.2 Pass the complete quality gate
+- [x] 3.3 Pass the dependency audit
+- [x] 3.4 Pass diff validation
+- [x] 3.5 Pass publication scan with no sensitive artifacts
 
 #### Manual
 
 - [ ] 3.6 Verify inventory and both approval stops against disposable Claude-style and Codex-style fixtures
 - [ ] 3.7 Verify a self-contained fixture activates or copies while its source stays byte-for-byte unchanged
-- [ ] 3.8 Verify final desktop and mobile layouts with keyboard navigation
+- [x] 3.8 Verify final desktop and mobile layouts with keyboard navigation
 - [ ] 3.9 Approve the final publication diff

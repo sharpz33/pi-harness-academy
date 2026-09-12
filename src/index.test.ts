@@ -41,6 +41,7 @@ describe('The Heist mission workspace', () => {
     expect(response.status).toBe(200)
     expect(response.headers.get('content-type')).toContain('text/html')
     expect(response.headers.get('set-cookie')).toBeNull()
+    expect(response.headers.get('www-authenticate')).toBeNull()
     expectSecurityHeaders(response)
     expect(body).toContain('<title>The Heist — Pi Harness Academy</title>')
     expect(body).toContain('01 // Launch Bay')
@@ -53,8 +54,8 @@ describe('The Heist mission workspace', () => {
     expect(body).toContain('<script src="/mission.js" defer></script>')
   })
 
-  it('returns 404 for an unknown mission slug', async () => {
-    const response = await app.request('http://academy.local/missions/unknown-mission')
+  it.each(['unknown-mission', 'x-ray-vision'])('returns 404 for unavailable mission %s', async (slug) => {
+    const response = await app.request(`http://academy.local/missions/${slug}`)
 
     expect(response.status).toBe(404)
     expect(response.headers.get('content-type')).toContain('text/html')
@@ -72,6 +73,8 @@ describe('The Heist mission workspace', () => {
     expectSecurityHeaders(response)
     expect(body).toContain("navigator.clipboard.writeText")
     expect(body).toContain("evidenceChecks.length === 4")
+    expect(body).toContain("evidenceReady.hidden = !isReady")
+    expect(body).toContain("Text selected—copy it manually.")
     expect(body).not.toMatch(/localStorage|sessionStorage|indexedDB|document\.cookie/)
     expect(body).not.toMatch(/\bfetch\s*\(|XMLHttpRequest|sendBeacon|WebSocket/)
   })

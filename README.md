@@ -2,7 +2,7 @@
 
 Pi Harness Academy is a public, twelve-mission path for turning a minimal Pi coding agent into a controlled multi-agent pull-request pipeline. Every lesson and mission instruction will remain readable without an account. Authentication will protect only verified checkpoints, private progress, readiness, synchronization, and completion proof.
 
-The repository currently contains the first public Mission Control shell. Authentication, D1 persistence, companion authorization, and checkpoint verification are not implemented yet. Fresh Pi users may follow the Academy in their default profile; learners with an existing Pi setup are offered a separate Academy profile.
+The repository contains Mission Control and the complete public The Heist lesson. Its four browser checks produce ephemeral local evidence, not verified progress. Authentication, D1 persistence, companion authorization, and checkpoint verification are not implemented yet. Fresh Pi users may follow the Academy in their default profile; learners with an existing Pi setup are offered a separate Academy profile.
 
 ## Stack
 
@@ -25,13 +25,16 @@ npm run dev
 
 Wrangler prints the local URL. The application does not require Cloudflare resources for the current public shell.
 
-## Quality checks
+## Quality and release checks
 
 ```sh
+npm ci
 npm run check
+npm audit --audit-level=low
+git diff --check
 ```
 
-The check runs TypeScript validation, Vitest, and a Wrangler deployment dry-run. Run `npm audit` separately to inspect known dependency vulnerabilities.
+`npm run check` runs TypeScript validation, Vitest, and a Wrangler deployment dry-run. Review the publication diff for credentials, private paths, transcripts, and `.ai/` content before requesting deployment approval.
 
 ## Deployment safety
 
