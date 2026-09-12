@@ -283,34 +283,34 @@ There is no data migration. Existing homepage URLs remain valid. The first missi
 
 #### Automated
 
-- [x] 1.1 Verify exactly twelve ordered mission records with unique slugs
-- [x] 1.2 Verify The Heist includes Launch Bay, approval boundaries, four evidence items, and official sources
-- [x] 1.3 Verify prompt tests cover prohibited categories, approval stops, untrusted content, native activation, and narrow copy scope
-- [x] 1.4 Pass typechecking and unit tests
-- [x] 1.5 Keep AGENTS.md within 400 words
+- [x] 1.1 Verify exactly twelve ordered mission records with unique slugs — 9d414f3
+- [x] 1.2 Verify The Heist includes Launch Bay, approval boundaries, four evidence items, and official sources — 9d414f3
+- [x] 1.3 Verify prompt tests cover prohibited categories, approval stops, untrusted content, native activation, and narrow copy scope — 9d414f3
+- [x] 1.4 Pass typechecking and unit tests — 9d414f3
+- [x] 1.5 Keep AGENTS.md within 400 words — 9d414f3
 
 #### Manual
 
-- [x] 1.6 Approve the complete mission prompt as a safe staged operator
-- [x] 1.7 Approve the adaptive profile policy across canonical documents
+- [x] 1.6 Approve the complete mission prompt as a safe staged operator — 9d414f3
+- [x] 1.7 Approve the adaptive profile policy across canonical documents — 9d414f3
 
 ### Phase 2: Deliver the Mission Workspace
 
 #### Automated
 
-- [ ] 2.1 Verify The Heist returns public HTML with the complete lesson contract
-- [ ] 2.2 Verify the homepage links The Heist and still lists twelve missions
-- [ ] 2.3 Verify unknown mission slugs return 404
-- [ ] 2.4 Verify the client script Content-Type and absence of persistence or network calls
-- [ ] 2.5 Verify existing CSP and security headers remain intact
-- [ ] 2.6 Pass the complete local quality gate
+- [x] 2.1 Verify The Heist returns public HTML with the complete lesson contract
+- [x] 2.2 Verify the homepage links The Heist and still lists twelve missions
+- [x] 2.3 Verify unknown mission slugs return 404
+- [x] 2.4 Verify the client script Content-Type and absence of persistence or network calls
+- [x] 2.5 Verify existing CSP and security headers remain intact
+- [x] 2.6 Pass the complete local quality gate
 
 #### Manual
 
-- [ ] 2.7 Verify lesson navigation and copy interactions using keyboard only
-- [ ] 2.8 Verify the Clipboard API fallback leaves copyable text and clear feedback
-- [ ] 2.9 Verify local evidence appears only after four checks and resets on refresh
-- [ ] 2.10 Accept desktop and mobile mission layouts without a fake terminal
+- [x] 2.7 Verify lesson navigation and copy interactions using keyboard only
+- [x] 2.8 Verify the Clipboard API fallback leaves copyable text and clear feedback
+- [x] 2.9 Verify local evidence appears only after four checks and resets on refresh
+- [x] 2.10 Accept desktop and mobile mission layouts without a fake terminal
 
 ### Phase 3: Harden Safety, Documentation, and Release Evidence
 
