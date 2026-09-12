@@ -291,8 +291,8 @@ There is no data migration. Existing homepage URLs remain valid. The first missi
 
 #### Manual
 
-- [ ] 1.6 Approve the complete mission prompt as a safe staged operator
-- [ ] 1.7 Approve the adaptive profile policy across canonical documents
+- [x] 1.6 Approve the complete mission prompt as a safe staged operator
+- [x] 1.7 Approve the adaptive profile policy across canonical documents
 
 ### Phase 2: Deliver the Mission Workspace
 
