@@ -2,7 +2,7 @@
 
 Pi Harness Academy is a public, twelve-mission path for turning a minimal Pi coding agent into a controlled multi-agent pull-request pipeline. Every lesson and mission instruction will remain readable without an account. Authentication will protect only verified checkpoints, private progress, readiness, synchronization, and completion proof.
 
-The repository contains Mission Control, the complete public The Heist lesson, and a local passwordless-login vertical slice. Its four browser checks produce ephemeral local evidence, not verified progress. Production D1 and email delivery, companion authorization, and checkpoint verification are not connected yet. Fresh Pi users may follow the Academy in their default profile; learners with an existing Pi setup are offered a separate Academy profile.
+The repository contains Mission Control, all twelve public lessons, production passwordless login, and the Academy companion extension. The companion uses a revocable device credential to submit a fixed allowlist of local checkpoint booleans; it never submits source, paths, prompts, environment values, credentials, or transcripts. Fresh Pi users may follow the Academy in their default profile; learners with an existing Pi setup are offered a separate Academy profile.
 
 ## Stack
 
@@ -26,6 +26,16 @@ npm run dev
 ```
 
 Wrangler prints the local URL and captures passwordless messages through its local Email Sending simulator. The local environment uses an isolated D1 database and does not require production Cloudflare resources.
+
+## Verified journey
+
+After reviewing the pinned companion source, install it in the Pi profile selected for the Academy journey:
+
+```sh
+pi install git:github.com/sharpz33/pi-harness-academy@verified-journey-v0.1.0
+```
+
+Run `/academy-connect`, approve the matching short code in the browser, complete The Heist, then run `/academy-check the-heist`. The scoped credential is stored only in the selected Pi profile with restrictive file permissions and can be revoked from the private Journey page.
 
 ## Quality and release checks
 

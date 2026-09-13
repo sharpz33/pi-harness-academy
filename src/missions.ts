@@ -85,7 +85,8 @@ Stage 3 — activate, verify, and report
 13. After approval, activate the native candidate in place or copy only the approved adaptable Markdown resource to the approved Pi destination. Leave the source untouched.
 14. Recompute the local source digest and report only source_unchanged: true or false. Stop with failure if it changed.
 15. Validate that Pi can discover the capability. Ask me to invoke it; do not silently execute newly discovered instructions.
-16. Return only this local evidence summary, with no paths, contents, or digests:
+16. After successful invocation, write only this allowlisted checkpoint file to .pi-academy/evidence/the-heist.json: {"mission":"the-heist","checks":{"capability-executed":true,"source-unchanged":true,"boundaries-held":true,"choice-explained":true}}. Set a check to false unless its condition was directly established. Do not add paths, contents, digests, timestamps, identities, or other fields.
+17. Return only this local evidence summary, with no paths, contents, or digests:
    - source_harness
    - resource_type
    - classification: native or adaptable

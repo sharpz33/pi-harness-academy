@@ -1,6 +1,14 @@
 {
   "name": "pi-harness-academy",
   "type": "module",
+  "keywords": [
+    "pi-package"
+  ],
+  "pi": {
+    "extensions": [
+      "./companion/index.ts"
+    ]
+  },
   "engines": {
     "node": ">=24"
   },
@@ -17,6 +25,8 @@
     "hono": "^4.13.7"
   },
   "devDependencies": {
+    "@earendil-works/pi-coding-agent": "^0.84.3",
+    "@types/node": "^24.13.4",
     "typescript": "^7.0.2",
     "vitest": "^5.0.0",
     "wrangler": "^4.110.0"
