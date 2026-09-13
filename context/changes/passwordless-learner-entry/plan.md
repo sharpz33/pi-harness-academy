@@ -369,34 +369,34 @@ The auth worktree must first incorporate `feat/public-heist-mission`. Its roadma
 
 #### Automated
 
-- [x] 1.1 Public-mission baseline passes before auth edits
-- [x] 1.2 Local D1 migration applies cleanly
-- [x] 1.3 Auth and route tests pass
-- [x] 1.4 Type checking passes
-- [x] 1.5 Full local quality gate passes
-- [x] 1.6 Dependency audit has no unresolved critical blocker
-- [x] 1.7 Patch formatting passes
+- [x] 1.1 Public-mission baseline passes before auth edits — 534b344
+- [x] 1.2 Local D1 migration applies cleanly — 534b344
+- [x] 1.3 Auth and route tests pass — 534b344
+- [x] 1.4 Type checking passes — 534b344
+- [x] 1.5 Full local quality gate passes — 534b344
+- [x] 1.6 Dependency audit has no unresolved critical blocker — 534b344
+- [x] 1.7 Patch formatting passes — 534b344
 
 #### Manual
 
-- [x] 1.8 Local magic-link login and logout work through Wrangler simulation
-- [x] 1.9 Anonymous public content remains available
-- [x] 1.10 Verification GET is side-effect free
-- [x] 1.11 Consumed-link replay is rejected
+- [x] 1.8 Local magic-link login and logout work through Wrangler simulation — 534b344
+- [x] 1.9 Anonymous public content remains available — 534b344
+- [x] 1.10 Verification GET is side-effect free — 534b344
+- [x] 1.11 Consumed-link replay is rejected — 534b344
 
 ### Phase 2: Wire Production D1 and Email Delivery
 
 #### Automated
 
-- [ ] 2.1 Production configuration and dry-run pass
-- [ ] 2.2 Approved remote D1 migration succeeds
+- [x] 2.1 Production configuration and dry-run pass
+- [x] 2.2 Approved remote D1 migration succeeds
 - [ ] 2.3 CI passes on the deployment commit
-- [ ] 2.4 Publication secret scan passes
+- [x] 2.4 Publication secret scan passes
 
 #### Manual
 
-- [ ] 2.5 Production targets and side effects are explicitly approved
-- [ ] 2.6 Approved mailbox receives a working login link
+- [x] 2.5 Production targets and side effects are explicitly approved
+- [x] 2.6 Approved mailbox receives a working login link
 - [ ] 2.7 Production deployment returns the expected version and URL
 
 ### Phase 3: Run the Production Smoke Gate

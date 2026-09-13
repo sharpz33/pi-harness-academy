@@ -3,9 +3,33 @@
   "name": "pi-harness-academy",
   "main": "src/index.ts",
   "compatibility_date": "2026-09-11",
+  "vars": {
+    "APP_ORIGIN": "https://piacade.my",
+    "AUTH_FROM": "noreply@piacade.my"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "pi-harness-academy-prod",
+      "database_id": "ac702d2b-e4b8-4bcb-9f8b-645cb678ed9d",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "send_email": [
+    {
+      "name": "EMAIL"
+    }
+  ],
+  "routes": [
+    {
+      "pattern": "piacade.my",
+      "custom_domain": true
+    }
+  ],
   "env": {
     "local": {
       "name": "pi-harness-academy-local",
+      "routes": [],
       "vars": {
         "APP_ORIGIN": "http://localhost:8787",
         "AUTH_FROM": "login@local.invalid"
