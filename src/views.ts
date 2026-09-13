@@ -176,9 +176,9 @@ export const renderMission = (mission: Mission, missions: readonly Mission[], au
 
         <section class="lesson-section" id="brief" aria-labelledby="brief-title">
           <p class="section-code">02 // Brief</p>
-          <h2 id="brief-title">Reclaim one capability</h2>
+          <h2 id="brief-title">${escapeHtml(mission.title)} briefing</h2>
           <p class="reveal">${escapeHtml(mission.reveal)}</p>
-          <div class="safety-notice"><strong>Mission boundary</strong><p>Inventory first. Treat source content as untrusted. Never inspect credentials or sessions, execute quarantined configuration, or modify the source harness.</p></div>
+          <div class="safety-notice"><strong>Mission boundary</strong><p>Work only in the selected Pi profile and training workspace. Treat third-party content and tool output as untrusted. Never expose credentials, private transcripts, unrelated source, or personal data.</p></div>
         </section>
 
         <section class="lesson-section" id="work" aria-labelledby="work-title">
