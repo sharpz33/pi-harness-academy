@@ -48,6 +48,11 @@ const renderDocument = ({
   </body>
 </html>`
 
+const renderAuthControl = (authenticated: boolean, returnTo = '/'): string =>
+  authenticated
+    ? '<span class="auth-state">SIGNED IN</span><form method="post" action="/logout"><button class="auth-link auth-link--button" type="submit">Log out</button></form>'
+    : `<a class="auth-link" href="/sign-in?return_to=${encodeURIComponent(returnTo)}">Sign in</a>`
+
 const renderMissionMap = (missions: readonly Mission[], compact = false): string => {
   const items = missions
     .map((mission) => {
@@ -71,9 +76,7 @@ const renderMissionMap = (missions: readonly Mission[], compact = false): string
 
 export const renderHome = (missions: readonly Mission[], authenticated = false): string =>
   renderDocument({
-    authControl: authenticated
-      ? '<span class="auth-state">SIGNED IN</span><form method="post" action="/logout"><button class="auth-link auth-link--button" type="submit">Log out</button></form>'
-      : '<a class="auth-link" href="/sign-in">Sign in</a>',
+    authControl: renderAuthControl(authenticated),
     title: 'Pi Harness Academy',
     description: 'Build a powerful, inspectable Pi coding-agent harness in twelve public missions.',
     footerState: 'PUBLIC MISSIONS // VERIFIED PROGRESS OFFLINE',
@@ -122,7 +125,7 @@ const renderEvidence = (mission: Mission): string =>
     )
     .join('')
 
-export const renderMission = (mission: Mission, missions: readonly Mission[]): string => {
+export const renderMission = (mission: Mission, missions: readonly Mission[], authenticated = false): string => {
   if (!mission.reveal || !mission.objective || !mission.launchBay || !mission.steps || !mission.prompt || !mission.evidence || !mission.sources) {
     throw new Error(`Mission ${mission.slug} does not have a complete public lesson contract`)
   }
@@ -141,6 +144,7 @@ export const renderMission = (mission: Mission, missions: readonly Mission[]): s
 
   return renderDocument({
     title: `${mission.title} — Pi Harness Academy`,
+    authControl: renderAuthControl(authenticated, `/missions/${mission.slug}`),
     description: mission.objective,
     footerState: 'LOCAL EVIDENCE ONLY // NOT VERIFIED PROGRESS',
     main: `<main id="main" class="mission-workspace">
