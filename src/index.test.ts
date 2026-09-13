@@ -117,6 +117,19 @@ describe('passwordless learner entry', () => {
     expect(await home.text()).toContain('SIGNED IN')
   })
 
+  it('shows authenticated controls on a mission page', async () => {
+    const auth = createFakeAuth()
+    const response = await createApp(auth).request('https://academy.example/missions/the-heist', {
+      headers: { Cookie: `${SESSION_COOKIE}=${'s'.repeat(43)}` },
+    })
+    const body = await response.text()
+
+    expect(response.status).toBe(200)
+    expect(auth.findSession).toHaveBeenCalledWith('s'.repeat(43))
+    expect(body).toContain('SIGNED IN')
+    expect(body).toContain('action="/logout"')
+  })
+
   it('revokes the session and clears the cookie on logout', async () => {
     const auth = createFakeAuth()
     const cookie = `${SESSION_COOKIE}=${'s'.repeat(43)}`
@@ -158,6 +171,7 @@ describe('The Heist mission workspace', () => {
     expect(body.match(/data-evidence-check/g)).toHaveLength(4)
     expect(body).toContain('not verified progress')
     expect(body).toContain('<script src="/mission.js" defer></script>')
+    expect(body).toContain('href="/sign-in?return_to=%2Fmissions%2Fthe-heist"')
   })
 
   it.each(['unknown-mission', 'x-ray-vision'])('returns 404 for unavailable mission %s', async (slug) => {

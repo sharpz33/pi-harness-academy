@@ -98,14 +98,16 @@ export const createApp = (authOverride?: AuthApplication) => {
     return c.redirect('/', 303)
   })
 
-  app.get('/missions/:slug', (c) => {
+  app.get('/missions/:slug', async (c) => {
     const mission = missions.find(({ slug, availability }) => slug === c.req.param('slug') && availability === 'available')
 
     if (!mission) {
       return c.html(renderNotFound(), 404)
     }
 
-    return c.html(renderMission(mission, missions))
+    const sessionToken = getCookie(c, SESSION_COOKIE)
+    const authenticated = sessionToken ? Boolean(await authFor(c.env).findSession(sessionToken)) : false
+    return c.html(renderMission(mission, missions, authenticated))
   })
 
   return app
