@@ -15,11 +15,13 @@ const renderDocument = ({
   description,
   main,
   footerState,
+  authControl = '<a class="auth-link" href="/sign-in">Sign in</a>',
 }: {
   title: string
   description: string
   main: string
   footerState: string
+  authControl?: string
 }): string => `<!doctype html>
 <html lang="en">
   <head>
@@ -33,7 +35,10 @@ const renderDocument = ({
     <a class="skip-link" href="#main">Skip to main content</a>
     <header class="topbar">
       <a class="wordmark" href="/" aria-label="Pi Harness Academy home">PI HARNESS ACADEMY</a>
-      <span class="system-state"><span aria-hidden="true"></span>SYSTEM ONLINE</span>
+      <div class="topbar__actions">
+        <span class="system-state"><span aria-hidden="true"></span>SYSTEM ONLINE</span>
+        ${authControl}
+      </div>
     </header>
     ${main}
     <footer>
@@ -64,8 +69,11 @@ const renderMissionMap = (missions: readonly Mission[], compact = false): string
   return `<ol class="mission-list${compact ? ' mission-list--rail' : ''}">${items}</ol>`
 }
 
-export const renderHome = (missions: readonly Mission[]): string =>
+export const renderHome = (missions: readonly Mission[], authenticated = false): string =>
   renderDocument({
+    authControl: authenticated
+      ? '<span class="auth-state">SIGNED IN</span><form method="post" action="/logout"><button class="auth-link auth-link--button" type="submit">Log out</button></form>'
+      : '<a class="auth-link" href="/sign-in">Sign in</a>',
     title: 'Pi Harness Academy',
     description: 'Build a powerful, inspectable Pi coding-agent harness in twelve public missions.',
     footerState: 'PUBLIC MISSIONS // VERIFIED PROGRESS OFFLINE',
@@ -207,6 +215,43 @@ export const renderMission = (mission: Mission, missions: readonly Mission[]): s
     </main>`,
   })
 }
+
+export const renderSignIn = (returnTo = '/', error?: string): string =>
+  renderDocument({
+    title: 'Sign in — Pi Harness Academy',
+    description: 'Sign in to save verified Pi Harness Academy progress.',
+    footerState: 'PASSWORDLESS ENTRY',
+    authControl: '<a class="auth-link" href="/">Public missions</a>',
+    main: `<main id="main"><section class="auth-panel"><p class="eyebrow">LEARNER ACCESS</p><h1>Continue by email.</h1><p>We will send a one-time link. Public missions remain available without an account.</p>${error ? `<p class="form-error" role="alert">${escapeHtml(error)}</p>` : ''}<form class="auth-form" method="post" action="/auth/requests"><label for="email">Email address</label><input id="email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="254" required><input name="return_to" type="hidden" value="${escapeHtml(returnTo)}"><button class="copy-button copy-button--primary" type="submit">Send sign-in link</button></form></section></main>`,
+  })
+
+export const renderAuthRequestResult = (state: 'sent' | 'rate_limited' | 'delivery_failed'): string => {
+  const messages = {
+    sent: ['Check your inbox.', 'If the address can receive Academy mail, a confirmation link is on its way.'],
+    rate_limited: ['Too many requests.', 'Wait 15 minutes, then request another sign-in link.'],
+    delivery_failed: ['We could not send the link.', 'Try again shortly. Public missions are still available.'],
+  } as const
+  const [title, detail] = messages[state]
+
+  return renderDocument({
+    title: `${title} — Pi Harness Academy`,
+    description: detail,
+    footerState: 'PASSWORDLESS ENTRY',
+    authControl: '<a class="auth-link" href="/">Public missions</a>',
+    main: `<main id="main"><section class="auth-panel"><p class="eyebrow">LEARNER ACCESS</p><h1>${escapeHtml(title)}</h1><p>${escapeHtml(detail)}</p><p><a href="/sign-in">Request another link</a> or <a href="/">return to public missions</a>.</p></section></main>`,
+  })
+}
+
+export const renderVerifyLogin = (token: string, valid: boolean): string =>
+  renderDocument({
+    title: `${valid ? 'Confirm sign-in' : 'Link unavailable'} — Pi Harness Academy`,
+    description: valid ? 'Confirm your Pi Harness Academy sign-in.' : 'The sign-in link is invalid or expired.',
+    footerState: 'PASSWORDLESS ENTRY',
+    authControl: '<a class="auth-link" href="/">Public missions</a>',
+    main: valid
+      ? `<main id="main"><section class="auth-panel"><p class="eyebrow">CONFIRM ACCESS</p><h1>Enter Academy.</h1><p>This action uses the one-time link and starts your private learner session.</p><form class="auth-form" method="post" action="/auth/verify"><input name="token" type="hidden" value="${escapeHtml(token)}"><button class="copy-button copy-button--primary" type="submit">Confirm sign-in</button></form></section></main>`
+      : '<main id="main"><section class="auth-panel"><p class="eyebrow">LINK UNAVAILABLE</p><h1>Request a new link.</h1><p>This sign-in link is invalid, expired, or already used.</p><p><a href="/sign-in">Return to sign in</a>.</p></section></main>',
+  })
 
 export const renderNotFound = (): string =>
   renderDocument({

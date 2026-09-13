@@ -3,7 +3,7 @@ project: Pi Harness Academy
 version: 1
 status: active
 created: 2026-09-11
-updated: 2026-09-11
+updated: 2026-09-12
 prd_version: 2
 main_goal: speed
 top_blocker: time
@@ -42,7 +42,7 @@ A north star is the smallest end-to-end result that proves the product's central
 | ID | Change ID | Outcome (user can …) | Prerequisites | PRD refs | Status |
 | --- | --- | --- | --- | --- | --- |
 | S-01 | public-heist-mission | read and perform the complete public The Heist mission | — | US-01, FR-001 | in-progress |
-| S-02 | passwordless-learner-entry | authenticate by email and see their own verified-journey starting state | — | US-01, US-02, FR-007 | blocked |
+| S-02 | passwordless-learner-entry | authenticate by email and see their own verified-journey starting state | — | US-01, US-02, FR-007 | in-progress |
 | S-03 | academy-profile-authorization | authorize and revoke the Pi profile selected for the Academy journey | S-02 | US-01, FR-003 | blocked |
 | S-04 | first-verified-checkpoint | receive pass or fail for The Heist and unlock X-Ray Vision only after valid evidence | S-01, S-02, S-03 | US-01, FR-004, FR-005, FR-006 | blocked |
 | S-05 | private-progress-sync | view, update, delete, and resume only their own synchronized progress | S-04 | US-02, FR-002, FR-008 | proposed |
@@ -100,7 +100,7 @@ No separate foundation is justified yet. Data, authentication, and evidence cont
 - **Unknowns:**
   - Which delivery, expiry, retry, and provider-fallback behavior is acceptable for launch? — Owner: user. Block: yes.
 - **Risk:** Treating a locally generated link as success would hide the external dependency that can block every verified learner.
-- **Status:** blocked
+- **Status:** in-progress
 
 ### S-03: Isolated Academy profile authorization
 

@@ -5,9 +5,10 @@
     "node": ">=24"
   },
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "dev": "wrangler dev --env local",
+    "deploy": "wrangler deploy --minify --env=\"\"",
+    "cf-typegen": "wrangler types --env local --env-interface CloudflareBindings",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local --env local",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "check": "npm run typecheck && npm test && npm run deploy -- --dry-run"

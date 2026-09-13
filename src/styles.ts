@@ -548,6 +548,69 @@ textarea {
   padding: clamp(2rem, 7vw, 6rem);
 }
 
+.topbar__actions,
+.auth-form {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.auth-link,
+.auth-state {
+  color: var(--signal);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.auth-link--button {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.auth-panel {
+  min-height: 70vh;
+  padding: clamp(2rem, 7vw, 6rem);
+}
+
+.auth-panel > p:not(.eyebrow) {
+  max-width: 58ch;
+  color: var(--muted);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+.auth-form {
+  align-items: stretch;
+  flex-direction: column;
+  max-width: 34rem;
+  margin-top: 2rem;
+}
+
+.auth-form label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.auth-form input[type="email"] {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--muted);
+  font: inherit;
+}
+
+.form-error {
+  padding: 1rem;
+  border: 1px solid #ffbf5f;
+  color: #ffbf5f !important;
+}
+
 footer {
   border-top: 1px solid var(--line);
   border-bottom: 0;
@@ -559,6 +622,11 @@ footer {
   footer {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .topbar__actions {
+    align-items: flex-start;
+    flex-wrap: wrap;
   }
 
   main {
