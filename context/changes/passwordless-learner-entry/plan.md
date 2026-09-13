@@ -388,15 +388,15 @@ The auth worktree must first incorporate `feat/public-heist-mission`. Its roadma
 
 #### Automated
 
-- [x] 2.1 Production configuration and dry-run pass
-- [x] 2.2 Approved remote D1 migration succeeds
-- [ ] 2.3 CI passes on the deployment commit
-- [x] 2.4 Publication secret scan passes
+- [x] 2.1 Production configuration and dry-run pass — bb0d3da
+- [x] 2.2 Approved remote D1 migration succeeds — bb0d3da
+- [x] 2.3 CI passes on the deployment commit — bb0d3da
+- [x] 2.4 Publication secret scan passes — bb0d3da
 
 #### Manual
 
-- [x] 2.5 Production targets and side effects are explicitly approved
-- [x] 2.6 Approved mailbox receives a working login link
+- [x] 2.5 Production targets and side effects are explicitly approved — bb0d3da
+- [x] 2.6 Approved mailbox receives a working login link — bb0d3da
 - [ ] 2.7 Production deployment returns the expected version and URL
 
 ### Phase 3: Run the Production Smoke Gate
