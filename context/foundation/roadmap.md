@@ -42,7 +42,7 @@ A north star is the smallest end-to-end result that proves the product's central
 | ID | Change ID | Outcome (user can …) | Prerequisites | PRD refs | Status |
 | --- | --- | --- | --- | --- | --- |
 | S-01 | public-heist-mission | read and perform the complete public The Heist mission | — | US-01, FR-001 | in-progress |
-| S-02 | passwordless-learner-entry | authenticate by email and see their own verified-journey starting state | — | US-01, US-02, FR-007 | in-progress |
+| S-02 | passwordless-learner-entry | authenticate by email and see their own verified-journey starting state | — | US-01, US-02, FR-007 | done |
 | S-03 | academy-profile-authorization | authorize and revoke the Pi profile selected for the Academy journey | S-02 | US-01, FR-003 | blocked |
 | S-04 | first-verified-checkpoint | receive pass or fail for The Heist and unlock X-Ray Vision only after valid evidence | S-01, S-02, S-03 | US-01, FR-004, FR-005, FR-006 | blocked |
 | S-05 | private-progress-sync | view, update, delete, and resume only their own synchronized progress | S-04 | US-02, FR-002, FR-008 | proposed |
@@ -96,11 +96,10 @@ No separate foundation is justified yet. Data, authentication, and evidence cont
 - **PRD refs:** US-01, US-02, FR-007
 - **Prerequisites:** —
 - **Parallel with:** S-01
-- **Blockers:** Production email delivery depends on an approved sender and deliverability test.
-- **Unknowns:**
-  - Which delivery, expiry, retry, and provider-fallback behavior is acceptable for launch? — Owner: user. Block: yes.
-- **Risk:** Treating a locally generated link as success would hide the external dependency that can block every verified learner.
-- **Status:** in-progress
+- **Blockers:** —
+- **Unknowns:** —
+- **Risk:** Cloudflare Email Sending remains an external dependency; use the recorded adapter fallback if delivery degrades.
+- **Status:** done
 
 ### S-03: Isolated Academy profile authorization
 
@@ -209,7 +208,7 @@ No separate foundation is justified yet. Data, authentication, and evidence cont
 | Roadmap ID | Change ID | Suggested task title | Ready for `/10x-plan` | Notes |
 | --- | --- | --- | --- | --- |
 | S-01 | public-heist-mission | Deliver the complete public The Heist mission | yes | First ready vertical slice. |
-| S-02 | passwordless-learner-entry | Let a learner enter through passwordless email | no | Resolve delivery and retry behavior first. |
+| S-02 | passwordless-learner-entry | Let a learner enter through passwordless email | n/a | Completed and verified in production. |
 | S-03 | academy-profile-authorization | Authorize and revoke the selected Academy journey profile | no | Resolve device credential policy first. |
 | S-04 | first-verified-checkpoint | Verify The Heist and unlock X-Ray Vision | no | Resolve the minimal The Heist evidence contract first. |
 | S-05 | private-progress-sync | Synchronize learner-owned progress safely | no | Requires S-04. |
@@ -225,7 +224,6 @@ No separate foundation is justified yet. Data, authentication, and evidence cont
 2. **Which exact minimal fields may appear on public completion proof?** — Owner: user. Block: S-09.
 3. **What expiry, rotation, and local-storage policy protects Academy device credentials?** — Owner: user. Block: S-03.
 4. **Which deterministic checks and minimal result fields validate each of the 12 missions?** — Owner: user. Block: S-04, S-06, S-07, S-08.
-5. **Which delivery behavior and retry path make passwordless authentication reliable enough for launch?** — Owner: user. Block: S-02.
 
 ## Parked
 
