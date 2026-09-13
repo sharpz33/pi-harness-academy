@@ -6,6 +6,7 @@
 - Added the pinned Academy companion with `/academy-connect` and `/academy-check the-heist`.
 - Added allowlisted checkpoint submission, sequential unlocking, idempotent progress, readiness, and next-action state.
 - Added private Journey UI, profile revocation, and explicit progress deletion.
+- Added privacy-preserving public completion proof, revocation, link copying, and LinkedIn sharing.
 
 ## 2026-09-13 — Public The Heist and passwordless learner entry
 

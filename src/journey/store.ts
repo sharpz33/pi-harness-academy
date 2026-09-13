@@ -1,4 +1,4 @@
-import type { ApprovedAuthorization, DeviceAuthorization, DeviceIdentity, JourneyState, JourneyStore } from './types'
+import type { ApprovedAuthorization, CompletionProof, DeviceAuthorization, DeviceIdentity, JourneyState, JourneyStore } from './types'
 
 export class D1JourneyStore implements JourneyStore {
   constructor(private readonly db: D1Database) {}
@@ -76,14 +76,17 @@ export class D1JourneyStore implements JourneyStore {
   }
 
   async getJourney(learnerId: string, now: number): Promise<JourneyState> {
-    const [progress, devices] = await this.db.batch([
+    const [progress, devices, proofs] = await this.db.batch([
       this.db.prepare('SELECT mission_slug AS missionSlug FROM mission_progress WHERE learner_id = ? ORDER BY completed_at').bind(learnerId),
       this.db.prepare(`SELECT id, profile_label AS profileLabel FROM device_credentials
         WHERE learner_id = ? AND revoked_at IS NULL AND expires_at > ? ORDER BY created_at DESC`).bind(learnerId, now),
+      this.db.prepare(`SELECT public_id AS publicId, display_name AS displayName FROM completion_proofs
+        WHERE learner_id = ? AND revoked_at IS NULL`).bind(learnerId),
     ])
     return {
       completedSlugs: (progress.results as { missionSlug: string }[]).map(({ missionSlug }) => missionSlug),
       devices: devices.results as { id: string; profileLabel: string }[],
+      proof: (proofs.results[0] as CompletionProof | undefined) ?? null,
     }
   }
 
@@ -95,7 +98,33 @@ export class D1JourneyStore implements JourneyStore {
     return result.meta.changes === 1
   }
 
-  async deleteProgress(learnerId: string): Promise<void> {
-    await this.db.prepare('DELETE FROM mission_progress WHERE learner_id = ?').bind(learnerId).run()
+  async deleteProgress(learnerId: string, now: number): Promise<void> {
+    await this.db.batch([
+      this.db.prepare('DELETE FROM mission_progress WHERE learner_id = ?').bind(learnerId),
+      this.db.prepare('UPDATE completion_proofs SET revoked_at = ? WHERE learner_id = ? AND revoked_at IS NULL').bind(now, learnerId),
+    ])
+  }
+
+  async publishProof(learnerId: string, publicId: string, displayName: string, now: number): Promise<CompletionProof> {
+    await this.db.prepare(`INSERT INTO completion_proofs (id, learner_id, public_id, display_name, created_at)
+      VALUES (?, ?, ?, ?, ?)
+      ON CONFLICT(learner_id) DO UPDATE SET public_id = excluded.public_id,
+        display_name = excluded.display_name, created_at = excluded.created_at, revoked_at = NULL`)
+      .bind(crypto.randomUUID(), learnerId, publicId, displayName, now)
+      .run()
+    return { publicId, displayName }
+  }
+
+  async findProof(publicId: string): Promise<CompletionProof | null> {
+    return this.db.prepare(`SELECT public_id AS publicId, display_name AS displayName
+      FROM completion_proofs WHERE public_id = ? AND revoked_at IS NULL`)
+      .bind(publicId)
+      .first<CompletionProof>()
+  }
+
+  async revokeProof(learnerId: string, now: number): Promise<void> {
+    await this.db.prepare('UPDATE completion_proofs SET revoked_at = ? WHERE learner_id = ? AND revoked_at IS NULL')
+      .bind(now, learnerId)
+      .run()
   }
 }

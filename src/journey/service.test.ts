@@ -15,9 +15,12 @@ const createStore = (): JourneyStore => ({
   consumeAuthorization: vi.fn().mockResolvedValue(true),
   findDevice: vi.fn().mockResolvedValue({ id: 'device-1', learnerId: 'learner-1', profileLabel: 'Academy Pi' }),
   completeMission: vi.fn(),
-  getJourney: vi.fn().mockResolvedValue({ completedSlugs: [], devices: [] }),
+  getJourney: vi.fn().mockResolvedValue({ completedSlugs: [], devices: [], proof: null }),
   revokeDevice: vi.fn().mockResolvedValue(true),
   deleteProgress: vi.fn(),
+  publishProof: vi.fn().mockResolvedValue({ publicId: 'p'.repeat(43), displayName: 'Pi Learner' }),
+  findProof: vi.fn().mockResolvedValue(null),
+  revokeProof: vi.fn(),
 })
 
 const createService = (store = createStore(), generatedTokens = [token, credential]) => {
@@ -93,5 +96,21 @@ describe('verified journey service', () => {
 
     expect(await service.submitCheckpoint('invalid', 'the-heist', [])).toBeNull()
     expect(store.findDevice).not.toHaveBeenCalled()
+  })
+
+  it('publishes proof only after all twelve missions are complete', async () => {
+    const store = createStore()
+    const { service } = createService(store, ['p'.repeat(43)])
+    expect(await service.publishProof('learner-1', 'Pi Learner')).toBeNull()
+
+    vi.mocked(store.getJourney).mockResolvedValue({ completedSlugs: missions.map(({ slug }) => slug), devices: [], proof: null })
+    expect(await service.publishProof('learner-1', '  Pi   Learner  ')).toEqual({ publicId: 'p'.repeat(43), displayName: 'Pi Learner' })
+    expect(store.publishProof).toHaveBeenCalledWith('learner-1', 'p'.repeat(43), 'Pi Learner', now)
+  })
+
+  it('revokes public proof when progress is deleted', async () => {
+    const { store, service } = createService()
+    await service.deleteProgress('learner-1')
+    expect(store.deleteProgress).toHaveBeenCalledWith('learner-1', now)
   })
 })

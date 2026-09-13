@@ -238,12 +238,29 @@ export const renderJourney = (state: JourneyState, missions: readonly Mission[])
   const devices = state.devices.length > 0
     ? state.devices.map((device) => `<li><span>${escapeHtml(device.profileLabel)}</span><form method="post" action="/journey/devices/revoke"><input type="hidden" name="device_id" value="${escapeHtml(device.id)}"><button class="auth-link auth-link--button" type="submit">Revoke</button></form></li>`).join('')
     : '<li>No authorized Pi profile yet.</li>'
+  const proof = state.proof
+    ? `<p>Your public proof is active: <a href="/proof/${escapeHtml(state.proof.publicId)}">view proof</a>.</p><form method="post" action="/journey/proof/revoke"><button class="auth-link auth-link--button" type="submit">Revoke public proof</button></form>`
+    : completed.size === missions.length
+      ? '<form class="auth-form" method="post" action="/journey/proof"><label for="display-name">Public display name</label><input id="display-name" name="display_name" maxlength="60" required><button class="copy-button copy-button--primary" type="submit">Publish completion proof</button></form>'
+      : '<p>Completion proof unlocks after all twelve verified checkpoints.</p>'
   return renderDocument({
     title: 'Your journey — Pi Harness Academy',
     description: 'Private verified Academy progress and authorized Pi profiles.',
     footerState: 'PRIVATE VERIFIED JOURNEY',
     authControl: renderAuthControl(true),
-    main: `<main id="main"><section class="auth-panel journey-panel"><p class="eyebrow">VERIFIED JOURNEY</p><h1>${readiness}% ready.</h1><p>${next ? `Next mission: <a href="/missions/${escapeHtml(next.slug)}">${escapeHtml(next.title)}</a>.` : 'All twelve missions are verified.'}</p><h2>Connect Pi</h2><p>Review the <a href="https://github.com/sharpz33/pi-harness-academy/tree/verified-journey-v0.2.0/companion">companion source</a>, then install the pinned release in your selected Pi profile.</p><pre tabindex="0"><code>pi install git:github.com/sharpz33/pi-harness-academy@verified-journey-v0.2.0</code></pre><p>Run <code>/academy-connect</code> in Pi. After each mission writes its allowlisted evidence file, run <code>/academy-check &lt;mission-slug&gt;</code>. Checkpoints unlock in order.</p><h2>Mission state</h2><ol>${rows}</ol><h2>Authorized profiles</h2><ul>${devices}</ul><p><a href="/device">Enter a device code manually</a></p><p><a href="/journey/delete">Delete verified progress</a></p></section></main>`,
+    main: `<main id="main"><section class="auth-panel journey-panel"><p class="eyebrow">VERIFIED JOURNEY</p><h1>${readiness}% ready.</h1><p>${next ? `Next mission: <a href="/missions/${escapeHtml(next.slug)}">${escapeHtml(next.title)}</a>.` : 'All twelve missions are verified.'}</p><h2>Connect Pi</h2><p>Review the <a href="https://github.com/sharpz33/pi-harness-academy/tree/verified-journey-v0.2.0/companion">companion source</a>, then install the pinned release in your selected Pi profile.</p><pre tabindex="0"><code>pi install git:github.com/sharpz33/pi-harness-academy@verified-journey-v0.2.0</code></pre><p>Run <code>/academy-connect</code> in Pi. After each mission writes its allowlisted evidence file, run <code>/academy-check &lt;mission-slug&gt;</code>. Checkpoints unlock in order.</p><h2>Mission state</h2><ol>${rows}</ol><h2>Authorized profiles</h2><ul>${devices}</ul><p><a href="/device">Enter a device code manually</a></p><h2>Completion proof</h2>${proof}<p><a href="/journey/delete">Delete verified progress</a></p></section></main>`,
+  })
+}
+
+export const renderCompletionProof = (proof: { publicId: string; displayName: string }): string => {
+  const url = `https://piacade.my/proof/${proof.publicId}`
+  const linkedIn = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`
+  return renderDocument({
+    title: `${proof.displayName} completed Pi Harness Academy`,
+    description: 'Public completion proof for Pi Harness Academy.',
+    footerState: 'VERIFIED COMPLETION',
+    authControl: '<a class="auth-link" href="/">Public missions</a>',
+    main: `<main id="main"><section class="auth-panel"><p class="eyebrow">VERIFIED COMPLETION</p><h1>${escapeHtml(proof.displayName)} completed Pi Harness Academy.</h1><p>This public proof confirms completion of all twelve verified missions. It exposes no email address or detailed progress.</p><label for="proof-link">Public proof link</label><input id="proof-link" value="${escapeHtml(url)}" readonly><button class="copy-button copy-button--primary" type="button" data-copy-target="proof-link" aria-describedby="proof-status">Copy proof link</button><span class="copy-status" id="proof-status" role="status" aria-live="polite"></span><p><a href="${escapeHtml(linkedIn)}" rel="noopener noreferrer">Share on LinkedIn</a></p></section><script src="/mission.js" defer></script></main>`,
   })
 }
 
