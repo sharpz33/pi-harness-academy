@@ -174,8 +174,21 @@ describe('The Heist mission workspace', () => {
     expect(body).toContain('href="/sign-in?return_to=%2Fmissions%2Fthe-heist"')
   })
 
-  it.each(['unknown-mission', 'x-ray-vision'])('returns 404 for unavailable mission %s', async (slug) => {
-    const response = await app.request(`http://academy.local/missions/${slug}`)
+  it('renders every curriculum mission publicly', async () => {
+    for (const mission of missions) {
+      const response = await app.request(`http://academy.local/missions/${mission.slug}`)
+      const body = await response.text()
+
+      expect(response.status).toBe(200)
+      expect(response.headers.get('set-cookie')).toBeNull()
+      expectSecurityHeaders(response)
+      expect(body).toContain(`<title>${mission.title.replaceAll('&', '&amp;')} — Pi Harness Academy</title>`)
+      expect(body.match(/data-evidence-check/g)).toHaveLength(4)
+    }
+  })
+
+  it('returns 404 for an unknown mission', async () => {
+    const response = await app.request('http://academy.local/missions/unknown-mission')
 
     expect(response.status).toBe(404)
     expect(response.headers.get('content-type')).toContain('text/html')

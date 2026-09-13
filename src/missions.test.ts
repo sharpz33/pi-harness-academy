@@ -6,10 +6,23 @@ describe('mission catalog', () => {
     expect(missions).toHaveLength(12)
     expect(missions.map((mission) => mission.number)).toEqual(Array.from({ length: 12 }, (_, index) => index + 1))
     expect(new Set(missions.map((mission) => mission.slug))).toHaveProperty('size', missions.length)
-    expect(missions.filter((mission) => mission.availability === 'available')).toEqual([heistMission])
+    expect(missions.every((mission) => mission.availability === 'available')).toBe(true)
   })
 
-  it('defines the complete public The Heist contract', () => {
+  it('defines a complete public contract for every mission', () => {
+    missions.forEach((mission) => {
+      expect(mission.reveal).toBeTruthy()
+      expect(mission.objective).toBeTruthy()
+      expect(mission.launchBay?.commands.length).toBeGreaterThanOrEqual(2)
+      expect(mission.launchBay?.credentialBoundary).toBeTruthy()
+      expect(mission.steps).toHaveLength(4)
+      expect(mission.prompt).toContain(`Mission ${String(mission.number).padStart(2, '0')}`)
+      expect(mission.evidence).toHaveLength(4)
+      expect(mission.sources?.every((source) => source.url.startsWith('https://'))).toBe(true)
+    })
+  })
+
+  it('keeps the specialized The Heist safety contract', () => {
     expect(heistMission.launchBay?.commands).toHaveLength(3)
     expect(heistMission.launchBay?.credentialBoundary).toContain('directly inside Pi')
     expect(heistMission.steps).toHaveLength(4)
