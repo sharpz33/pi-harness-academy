@@ -17,6 +17,7 @@ describe('mission catalog', () => {
       expect(mission.launchBay?.credentialBoundary).toBeTruthy()
       expect(mission.steps).toHaveLength(4)
       expect(mission.prompt).toContain(`Mission ${String(mission.number).padStart(2, '0')}`)
+      expect(mission.prompt).toContain(`.pi-academy/evidence/${mission.slug}.json`)
       expect(mission.evidence).toHaveLength(4)
       expect(mission.sources?.every((source) => source.url.startsWith('https://'))).toBe(true)
     })
