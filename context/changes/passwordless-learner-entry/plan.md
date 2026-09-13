@@ -397,19 +397,19 @@ The auth worktree must first incorporate `feat/public-heist-mission`. Its roadma
 
 - [x] 2.5 Production targets and side effects are explicitly approved — bb0d3da
 - [x] 2.6 Approved mailbox receives a working login link — bb0d3da
-- [ ] 2.7 Production deployment returns the expected version and URL
+- [x] 2.7 Production deployment returns the expected version and URL — e039f68
 
 ### Phase 3: Run the Production Smoke Gate
 
 #### Automated
 
-- [ ] 3.1 Final quality gate passes on the deployed commit
-- [ ] 3.2 Final CI required check passes
-- [ ] 3.3 Final patch and secret checks pass
+- [x] 3.1 Final quality gate passes on the deployed commit — 0b89513
+- [x] 3.2 Final CI required check passes — 0b89513
+- [x] 3.3 Final patch and secret checks pass — 0b89513
 
 #### Manual
 
-- [ ] 3.4 New learner completes production email login end to end
-- [ ] 3.5 Anonymous lesson access remains intact
-- [ ] 3.6 Replay, logout, and browser-isolation checks match the contract
-- [ ] 3.7 Verification evidence contains no sensitive auth material
+- [x] 3.4 New learner completes production email login end to end — 0b89513
+- [x] 3.5 Anonymous lesson access remains intact — 0b89513
+- [x] 3.6 Replay, logout, and browser-isolation checks match the contract — 0b89513
+- [x] 3.7 Verification evidence contains no sensitive auth material — 0b89513

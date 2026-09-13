@@ -16,9 +16,9 @@ mail_provider: cloudflare-email-sending
 | Resource | State |
 |---|---|
 | Cloudflare zone `piacade.my` | Active on Cloudflare nameservers. |
-| Production D1 `pi-harness-academy-prod` | Created in EEUR; empty and not migrated. |
-| Worker `pi-harness-academy` | Existing production Worker. |
-| Custom domain `piacade.my` | Configured locally; not deployed. |
+| Production D1 `pi-harness-academy-prod` | Created in EEUR; auth migration applied. |
+| Worker `pi-harness-academy` | Deployed from protected `main`. |
+| Custom domain `piacade.my` | Active production route. |
 | Email Sending | `piacade.my` onboarded; one approved Gmail delivery succeeded. |
 
 ## Required Order
@@ -50,6 +50,7 @@ Give Cloudflare Email Sending at most 60 minutes after the zone becomes active. 
 - Never print or commit tokens, cookies, test mailbox addresses, API credentials, or raw magic links.
 - Keep production deployment manual.
 - Worker rollback does not roll back D1 schema or data.
-- Current recorded production rollback point: commit `89041c7b04a4f0d266b3b1e5db8c056426c2b823`, Worker version `fb295add-266f-4f90-9b73-5dd0d3209c3a`.
+- Current production: commit `cec9fc2e928c709619be5d2e863a301d15525b1b`, Worker version `bbdeba13-851e-4679-a977-1e54a0a90a4a`.
+- Previous working rollback version: `8cc2a77d-95c7-4b64-a2e5-429cead0ff89`.
 - Use a forward fix for the additive auth migration; do not run destructive rollback SQL.
 - Record the deployed commit and Worker version in `CHANGELOG.md` and verification evidence.

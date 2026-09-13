@@ -1,11 +1,12 @@
 # Changelog
 
-## Unreleased — Public The Heist mission
+## 2026-09-13 — Public The Heist and passwordless learner entry
 
-- Added the complete public The Heist lesson, staged migration prompt, and official source links.
-- Added keyboard-accessible copy controls and four browser-only evidence checks that reset on refresh.
-- Added route, prompt-safety, security-header, and ephemeral-state regression coverage.
-- Kept authentication, companion verification, and production deployment outside this release candidate.
+- Published the complete public The Heist lesson with keyboard-accessible copy controls and browser-only evidence checks.
+- Added scanner-safe passwordless email login, D1-backed sessions, logout, replay rejection, and request throttling.
+- Connected Cloudflare Email Sending and production D1 at <https://piacade.my>.
+- Preserved anonymous lesson access, mission return paths, and authenticated controls across navigation.
+- Deployed commit `cec9fc2e928c709619be5d2e863a301d15525b1b` as Worker version `bbdeba13-851e-4679-a977-1e54a0a90a4a`.
 
 ## 2026-09-11 — First public deployment
 
