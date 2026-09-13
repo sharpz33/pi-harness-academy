@@ -14,6 +14,16 @@ const request = async <T>(path: string, init: RequestInit): Promise<{ status: nu
   return { status: response.status, body }
 }
 
+const inspectLocalFile = async (path: string, maxBytes: number, missingMessage: string) => {
+  try {
+    const info = await lstat(path)
+    if (!info.isFile() || info.isSymbolicLink() || info.size > maxBytes) throw new Error(missingMessage)
+    return info
+  } catch {
+    throw new Error(missingMessage)
+  }
+}
+
 const saveCredential = async (credential: string): Promise<void> => {
   const directory = dirname(credentialPath)
   const temporary = `${credentialPath}.${crypto.randomUUID()}.tmp`
@@ -24,8 +34,7 @@ const saveCredential = async (credential: string): Promise<void> => {
 }
 
 const loadCredential = async (): Promise<string> => {
-  const info = await lstat(credentialPath)
-  if (!info.isFile() || info.isSymbolicLink() || info.size > 2048) throw new Error('Academy credential file is unsafe')
+  await inspectLocalFile(credentialPath, 2048, 'No valid Academy authorization found. Run /academy-connect first.')
   const parsed = JSON.parse(await readFile(credentialPath, 'utf8')) as { origin?: unknown; credential?: unknown }
   if (parsed.origin !== ACADEMY_ORIGIN || typeof parsed.credential !== 'string' || !/^[A-Za-z0-9_-]{43}$/.test(parsed.credential)) {
     throw new Error('Academy credential file is invalid')
@@ -95,8 +104,7 @@ export default function academyCompanion(pi: ExtensionAPI) {
       }
       try {
         const evidencePath = join(ctx.cwd, '.pi-academy', 'evidence', 'the-heist.json')
-        const info = await lstat(evidencePath)
-        if (!info.isFile() || info.isSymbolicLink() || info.size > 4096) throw new Error('The Heist evidence file is unsafe')
+        await inspectLocalFile(evidencePath, 4096, 'No valid The Heist evidence found. Run the current mission prompt, then retry /academy-check the-heist.')
         const parsed = JSON.parse(await readFile(evidencePath, 'utf8')) as { mission?: unknown; checks?: Record<string, unknown> }
         if (parsed.mission !== 'the-heist' || !parsed.checks || Object.keys(parsed.checks).some((id) => !REQUIRED_HEIST_CHECKS.includes(id as typeof REQUIRED_HEIST_CHECKS[number]))) {
           throw new Error('The Heist evidence shape is invalid')

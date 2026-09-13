@@ -32,7 +32,7 @@ Wrangler prints the local URL and captures passwordless messages through its loc
 After reviewing the pinned companion source, install it in the Pi profile selected for the Academy journey:
 
 ```sh
-pi install git:github.com/sharpz33/pi-harness-academy@verified-journey-v0.1.0
+pi install git:github.com/sharpz33/pi-harness-academy@verified-journey-v0.1.1
 ```
 
 Run `/academy-connect`, approve the matching short code in the browser, complete The Heist, then run `/academy-check the-heist`. The scoped credential is stored only in the selected Pi profile with restrictive file permissions and can be revoked from the private Journey page.

@@ -25,6 +25,7 @@ describe('Academy companion package', () => {
     expect(extension).toContain("mode: 0o600")
     expect(extension).toContain("chmod(temporary, 0o600)")
     expect(extension).toContain("info.isSymbolicLink()")
-    expect(extension).not.toMatch(/console\.(?:log|error)|credential\}\)/)
+    expect(extension).toContain('No valid The Heist evidence found.')
+    expect(extension).not.toMatch(/console\.(?:log|error)|credential\}\)|ENOENT/)
   })
 })
