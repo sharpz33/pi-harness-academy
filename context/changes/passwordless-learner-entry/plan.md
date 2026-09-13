@@ -403,13 +403,13 @@ The auth worktree must first incorporate `feat/public-heist-mission`. Its roadma
 
 #### Automated
 
-- [x] 3.1 Final quality gate passes on the deployed commit
-- [x] 3.2 Final CI required check passes
-- [x] 3.3 Final patch and secret checks pass
+- [x] 3.1 Final quality gate passes on the deployed commit — 0b89513
+- [x] 3.2 Final CI required check passes — 0b89513
+- [x] 3.3 Final patch and secret checks pass — 0b89513
 
 #### Manual
 
-- [x] 3.4 New learner completes production email login end to end
-- [x] 3.5 Anonymous lesson access remains intact
-- [x] 3.6 Replay, logout, and browser-isolation checks match the contract
-- [x] 3.7 Verification evidence contains no sensitive auth material
+- [x] 3.4 New learner completes production email login end to end — 0b89513
+- [x] 3.5 Anonymous lesson access remains intact — 0b89513
+- [x] 3.6 Replay, logout, and browser-isolation checks match the contract — 0b89513
+- [x] 3.7 Verification evidence contains no sensitive auth material — 0b89513
