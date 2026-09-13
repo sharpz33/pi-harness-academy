@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — Verified journey MVP
+
+- Added revocable Pi profile authorization through a short-code device flow.
+- Added the pinned Academy companion with `/academy-connect` and `/academy-check the-heist`.
+- Added allowlisted checkpoint submission, sequential unlocking, idempotent progress, readiness, and next-action state.
+- Added private Journey UI, profile revocation, and explicit progress deletion.
+
 ## 2026-09-13 — Public The Heist and passwordless learner entry
 
 - Published the complete public The Heist lesson with keyboard-accessible copy controls and browser-only evidence checks.

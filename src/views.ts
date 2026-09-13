@@ -1,3 +1,4 @@
+import type { JourneyState } from './journey/types'
 import type { Mission } from './missions'
 
 const escapeHtml = (value: string | number): string =>
@@ -50,7 +51,7 @@ const renderDocument = ({
 
 const renderAuthControl = (authenticated: boolean, returnTo = '/'): string =>
   authenticated
-    ? '<span class="auth-state">SIGNED IN</span><form method="post" action="/logout"><button class="auth-link auth-link--button" type="submit">Log out</button></form>'
+    ? '<span class="auth-state">SIGNED IN</span><a class="auth-link" href="/journey">Journey</a><form method="post" action="/logout"><button class="auth-link auth-link--button" type="submit">Log out</button></form>'
     : `<a class="auth-link" href="/sign-in?return_to=${encodeURIComponent(returnTo)}">Sign in</a>`
 
 const renderMissionMap = (missions: readonly Mission[], compact = false): string => {
@@ -219,6 +220,41 @@ export const renderMission = (mission: Mission, missions: readonly Mission[], au
     </main>`,
   })
 }
+
+export const renderDeviceApproval = (code: string, approved?: boolean, error?: string): string =>
+  renderDocument({
+    title: 'Authorize Pi profile — Pi Harness Academy',
+    description: 'Authorize a Pi profile to submit minimal Academy checkpoint results.',
+    footerState: 'DEVICE AUTHORIZATION',
+    authControl: renderAuthControl(true, `/device?code=${code}`),
+    main: `<main id="main"><section class="auth-panel"><p class="eyebrow">ACADEMY PROFILE</p><h1>${approved ? 'Profile authorized.' : 'Authorize this profile.'}</h1>${approved ? '<p>Return to Pi. The companion will finish authorization without exposing the credential here.</p><p><a href="/journey">Open your journey</a>.</p>' : `<p>Compare this code with the code shown by Pi. Approval permits only Academy checkpoint submissions and can be revoked from your journey.</p>${error ? `<p class="form-error" role="alert">${escapeHtml(error)}</p>` : ''}<form class="auth-form" method="post" action="/device/approve"><label for="user-code">Device code</label><input id="user-code" name="user_code" value="${escapeHtml(code)}" maxlength="9" required><label for="profile-label">Profile label</label><input id="profile-label" name="profile_label" value="Academy Pi" maxlength="60" required><button class="copy-button copy-button--primary" type="submit">Authorize profile</button></form>`}</section></main>`,
+  })
+
+export const renderJourney = (state: JourneyState, missions: readonly Mission[]): string => {
+  const completed = new Set(state.completedSlugs)
+  const next = missions.find(({ slug }) => !completed.has(slug))
+  const readiness = Math.round((completed.size / missions.length) * 100)
+  const rows = missions.map((mission) => `<li><strong>${missionNumber(mission.number)} ${escapeHtml(mission.title)}</strong> — ${completed.has(mission.slug) ? 'VERIFIED' : mission.slug === next?.slug ? 'NEXT' : 'LOCKED'}</li>`).join('')
+  const devices = state.devices.length > 0
+    ? state.devices.map((device) => `<li><span>${escapeHtml(device.profileLabel)}</span><form method="post" action="/journey/devices/revoke"><input type="hidden" name="device_id" value="${escapeHtml(device.id)}"><button class="auth-link auth-link--button" type="submit">Revoke</button></form></li>`).join('')
+    : '<li>No authorized Pi profile yet.</li>'
+  return renderDocument({
+    title: 'Your journey — Pi Harness Academy',
+    description: 'Private verified Academy progress and authorized Pi profiles.',
+    footerState: 'PRIVATE VERIFIED JOURNEY',
+    authControl: renderAuthControl(true),
+    main: `<main id="main"><section class="auth-panel journey-panel"><p class="eyebrow">VERIFIED JOURNEY</p><h1>${readiness}% ready.</h1><p>${next ? `Next mission: <a href="/missions/${escapeHtml(next.slug)}">${escapeHtml(next.title)}</a>.` : 'All twelve missions are verified.'}</p><h2>Connect Pi</h2><p>Review the <a href="https://github.com/sharpz33/pi-harness-academy/tree/verified-journey-v0.1.0/companion">companion source</a>, then install the pinned release in your selected Pi profile.</p><pre tabindex="0"><code>pi install git:github.com/sharpz33/pi-harness-academy@verified-journey-v0.1.0</code></pre><p>Run <code>/academy-connect</code> in Pi. After The Heist writes its allowlisted evidence file, run <code>/academy-check the-heist</code>.</p><h2>Mission state</h2><ol>${rows}</ol><h2>Authorized profiles</h2><ul>${devices}</ul><p><a href="/device">Enter a device code manually</a></p><p><a href="/journey/delete">Delete verified progress</a></p></section></main>`,
+  })
+}
+
+export const renderDeleteProgress = (): string =>
+  renderDocument({
+    title: 'Delete progress — Pi Harness Academy',
+    description: 'Permanently delete your private verified Academy progress.',
+    footerState: 'DESTRUCTIVE ACTION',
+    authControl: renderAuthControl(true),
+    main: '<main id="main"><section class="auth-panel"><p class="eyebrow">DESTRUCTIVE ACTION</p><h1>Delete all verified progress?</h1><p>This cannot be undone. Authorized profiles remain connected but all mission completions and readiness are removed.</p><form class="auth-form" method="post" action="/journey/delete"><button class="copy-button copy-button--primary" type="submit">Permanently delete progress</button></form><p><a href="/journey">Cancel</a></p></section></main>',
+  })
 
 export const renderSignIn = (returnTo = '/', error?: string): string =>
   renderDocument({

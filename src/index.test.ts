@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { AuthApplication } from './auth/types'
 import { SESSION_COOKIE } from './auth/types'
+import type { JourneyApplication } from './journey/types'
 import { app, createApp, missions } from './index'
 
 const expectSecurityHeaders = (response: { headers: { get(name: string): string | null } }) => {
@@ -149,6 +150,76 @@ describe('passwordless learner entry', () => {
 
     expect(response.status).toBe(403)
     expect(auth.logout).not.toHaveBeenCalled()
+  })
+})
+
+describe('verified journey routes', () => {
+  const auth = (): AuthApplication => ({
+    issueLogin: vi.fn(async () => 'sent' as const),
+    inspectLogin: vi.fn(async () => 'valid' as const),
+    confirmLogin: vi.fn(async () => ({ status: 'authenticated' as const, sessionToken: 's'.repeat(43), returnTo: '/' })),
+    findSession: vi.fn(async () => ({ learnerId: 'learner-1' })),
+    logout: vi.fn(async () => undefined),
+  })
+  const journey = (): JourneyApplication => ({
+    requestDevice: vi.fn().mockResolvedValue({ deviceCode: 'd'.repeat(43), userCode: 'ABCDEFGH', verificationUri: 'https://academy.example/device', verificationUriComplete: 'https://academy.example/device?code=ABCDEFGH', expiresIn: 600, interval: 3 }),
+    approveDevice: vi.fn().mockResolvedValue(true),
+    exchangeDevice: vi.fn().mockResolvedValue({ status: 'authorized', credential: 'c'.repeat(43), expiresIn: 7_776_000 }),
+    submitCheckpoint: vi.fn().mockResolvedValue({ status: 'passed', readiness: 8, completedSlugs: ['the-heist'], nextMission: 'x-ray-vision' }),
+    getJourney: vi.fn().mockResolvedValue({ completedSlugs: ['the-heist'], devices: [{ id: 'device-1', profileLabel: 'Academy Pi' }] }),
+    revokeDevice: vi.fn().mockResolvedValue(true),
+    deleteProgress: vi.fn().mockResolvedValue(undefined),
+  })
+
+  it('creates and exchanges a device authorization over JSON', async () => {
+    const journeyApp = journey()
+    const testApp = createApp(auth(), journeyApp)
+    const request = await testApp.request('https://academy.example/api/device-authorizations', {
+      method: 'POST', headers: { Origin: 'https://academy.example', 'Content-Type': 'application/json' }, body: '{}',
+    })
+    const exchange = await testApp.request('https://academy.example/api/device-authorizations/token', {
+      method: 'POST', headers: { Origin: 'https://academy.example', 'Content-Type': 'application/json' }, body: JSON.stringify({ deviceCode: 'd'.repeat(43) }),
+    })
+
+    expect(request.status).toBe(201)
+    expect(await request.json()).toEqual(expect.objectContaining({ userCode: 'ABCDEFGH' }))
+    expect(exchange.status).toBe(200)
+  })
+
+  it('renders progress only for the session learner', async () => {
+    const journeyApp = journey()
+    const response = await createApp(auth(), journeyApp).request('https://academy.example/journey', {
+      headers: { Cookie: `${SESSION_COOKIE}=${'s'.repeat(43)}` },
+    })
+    const body = await response.text()
+
+    expect(response.status).toBe(200)
+    expect(journeyApp.getJourney).toHaveBeenCalledWith('learner-1')
+    expect(body).toContain('8% ready.')
+    expect(body).toContain('Academy Pi')
+    expect(response.headers.get('cache-control')).toBe('no-store')
+  })
+
+  it('submits checkpoints through a bearer device credential', async () => {
+    const journeyApp = journey()
+    const checks = ['capability-executed', 'source-unchanged', 'boundaries-held', 'choice-explained']
+    const response = await createApp(auth(), journeyApp).request('https://academy.example/api/checkpoints/the-heist', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${'c'.repeat(43)}`, Origin: 'https://academy.example', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ passedChecks: checks }),
+    })
+
+    expect(response.status).toBe(200)
+    expect(journeyApp.submitCheckpoint).toHaveBeenCalledWith('c'.repeat(43), 'the-heist', checks)
+  })
+
+  it('redirects anonymous journey access to sign-in', async () => {
+    const authApp = auth()
+    vi.mocked(authApp.findSession).mockResolvedValue(null)
+    const response = await createApp(authApp, journey()).request('https://academy.example/journey')
+
+    expect(response.status).toBe(303)
+    expect(response.headers.get('location')).toBe('/sign-in?return_to=%2Fjourney')
   })
 })
 
