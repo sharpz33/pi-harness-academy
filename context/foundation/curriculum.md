@@ -2,7 +2,7 @@
 project: "Pi Harness Academy"
 status: locked-draft
 created: 2026-09-10
-updated: 2026-09-10
+updated: 2026-09-11
 steps: 12
 ---
 
@@ -24,15 +24,21 @@ WOW → mission → inspect the mechanism → personal upgrade → checkpoint
 
 Early steps activate reviewed, pinned capabilities quickly. Middle steps inspect and modify them. Later steps require original extension and orchestration work. Each retained capability compounds into the final mission.
 
-## Isolated cumulative profile
+## Cumulative profile
 
-All required work runs through an isolated Academy profile:
+A fresh Pi user may build the Academy journey in the default profile:
+
+```bash
+pi
+```
+
+A learner with existing Pi configuration is offered a separate Academy profile:
 
 ```bash
 PI_CODING_AGENT_DIR="$HOME/.pi-academy" pi
 ```
 
-The learner's normal Pi profile and source Claude Code or Codex setup remain unchanged. The Academy profile is authorized through a revocable browser-based device flow and never receives or reuses model-provider credentials from the Academy service.
+The learner chooses once, then retains capabilities cumulatively in that profile. Their source Claude Code or Codex setup remains unchanged. The selected Pi profile is authorized later through a revocable browser-based device flow. Model-provider authentication happens directly inside Pi; the Academy service never requests, receives, or reuses those credentials.
 
 Retain across steps:
 
@@ -56,18 +62,18 @@ Never migrate automatically:
 
 ### Step 1: The Heist
 
-**Reveal:** Your favorite capability from Claude Code or Codex can run inside an isolated Pi without replacing or modifying the source setup.
+**Reveal:** Your favorite capability from Claude Code or Codex can run inside Pi without replacing or modifying the source setup.
 
-**Mission:** Perform a read-only inventory, classify resources as native, adaptable, quarantined, or forbidden, then migrate one selected capability into the Academy profile.
+**Mission:** Install and launch Pi, paste the staged mission prompt, perform a read-only inventory, and classify resources as native, adaptable, quarantined, or forbidden. After explicit review, activate one native capability in place or copy one approved self-contained Markdown capability into the selected Pi profile.
 
 **Completion checkpoint:**
 
-- at least one selected capability executes successfully in the Academy Pi profile;
-- the source harness configuration remains unchanged;
+- at least one selected capability executes successfully in the chosen Pi profile;
+- a local pre/post comparison confirms the source harness configuration remains unchanged;
 - no credential value or unreviewed executable configuration was copied or executed;
 - the learner can identify what was migrated and what was deliberately left behind.
 
-**Mechanics learned by necessity:** isolated config directory, resource scopes, project trust, instructions, skills or prompts, package review.
+**Mechanics learned by necessity:** profile scope, optional config-directory isolation, project trust, untrusted instructions, skills or prompts, package review.
 
 ### Step 2: X-Ray Vision
 
