@@ -21,9 +21,15 @@ export type DeviceIdentity = {
   profileLabel: string
 }
 
+export type CompletionProof = {
+  publicId: string
+  displayName: string
+}
+
 export type JourneyState = {
   completedSlugs: string[]
   devices: { id: string; profileLabel: string }[]
+  proof: CompletionProof | null
 }
 
 export interface JourneyStore {
@@ -42,7 +48,10 @@ export interface JourneyStore {
   completeMission(learnerId: string, deviceId: string, missionSlug: string, now: number): Promise<void>
   getJourney(learnerId: string, now: number): Promise<JourneyState>
   revokeDevice(learnerId: string, deviceId: string, now: number): Promise<boolean>
-  deleteProgress(learnerId: string): Promise<void>
+  deleteProgress(learnerId: string, now: number): Promise<void>
+  publishProof(learnerId: string, publicId: string, displayName: string, now: number): Promise<CompletionProof>
+  findProof(publicId: string): Promise<CompletionProof | null>
+  revokeProof(learnerId: string, now: number): Promise<void>
 }
 
 export type DeviceRequest = {
@@ -65,6 +74,9 @@ export interface JourneyApplication {
   getJourney(learnerId: string): Promise<JourneyState>
   revokeDevice(learnerId: string, deviceId: string): Promise<boolean>
   deleteProgress(learnerId: string): Promise<void>
+  publishProof(learnerId: string, displayName: string): Promise<CompletionProof | null>
+  findProof(publicId: string): Promise<CompletionProof | null>
+  revokeProof(learnerId: string): Promise<void>
 }
 
 export type CheckpointResult = {

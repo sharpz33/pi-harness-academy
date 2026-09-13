@@ -127,7 +127,23 @@ export class JourneyService {
   }
 
   deleteProgress(learnerId: string): Promise<void> {
-    return this.store.deleteProgress(learnerId)
+    return this.store.deleteProgress(learnerId, this.now())
+  }
+
+  async publishProof(learnerId: string, displayName: string) {
+    const name = normalizeLabel(displayName)
+    if (name.length < 2) return null
+    const journey = await this.store.getJourney(learnerId, this.now())
+    if (new Set(journey.completedSlugs).size !== this.missions.length) return null
+    return this.store.publishProof(learnerId, this.token(), name, this.now())
+  }
+
+  findProof(publicId: string) {
+    return isTokenShapeValid(publicId) ? this.store.findProof(publicId) : Promise.resolve(null)
+  }
+
+  revokeProof(learnerId: string): Promise<void> {
+    return this.store.revokeProof(learnerId, this.now())
   }
 
   private result(status: CheckpointResult['status'], journey: JourneyState, missingChecks?: string[]): CheckpointResult {

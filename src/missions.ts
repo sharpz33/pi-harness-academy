@@ -188,7 +188,8 @@ Execution
 3. Ask for approval before the first external, installation, permission, or destructive side effect.
 4. Execute the bounded mission and capture evidence for each required check.
 5. Run the relevant deterministic verification and demonstrate failure or cleanup behavior.
-6. Return a compact report: outcome, evidence artifact names, checks passed or failed, retained capability, cleanup path, and next action. Do not include secrets, private paths, or raw transcripts.
+6. Write only this allowlisted checkpoint file to .pi-academy/evidence/${slug}.json: ${JSON.stringify({ mission: slug, checks: Object.fromEntries(evidence.map(({ id }) => [id, true])) })}. Set a check to false unless its condition was directly established. Do not add paths, contents, prompts, timestamps, identities, or other fields.
+7. Return a compact report: outcome, evidence artifact name, checks passed or failed, retained capability, cleanup path, and next action. Do not include secrets, private paths, or raw transcripts.
 
 Mechanics to explain
 ${mechanics}`,

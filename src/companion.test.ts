@@ -15,8 +15,9 @@ describe('Academy companion package', () => {
     expect(registerCommand.mock.calls.map(([name]) => name)).toEqual(['academy-connect', 'academy-check'])
   })
 
-  it('submits only fixed allowlisted The Heist evidence', () => {
-    expect(extension).toContain("const REQUIRED_HEIST_CHECKS = ['capability-executed', 'source-unchanged', 'boundaries-held', 'choice-explained']")
+  it('derives and submits only each mission allowlist', () => {
+    expect(extension).toContain("import { missions } from '../src/missions'")
+    expect(extension).toContain("const requiredChecks = mission.evidence.map(({ id }) => id)")
     expect(extension).toContain('body: JSON.stringify({ passedChecks })')
     expect(extension).not.toMatch(/process\.env\[[^\]]+\]|private transcript|sessionManager\.get/)
   })
@@ -25,6 +26,7 @@ describe('Academy companion package', () => {
     expect(extension).toContain("mode: 0o600")
     expect(extension).toContain("chmod(temporary, 0o600)")
     expect(extension).toContain("info.isSymbolicLink()")
-    expect(extension).not.toMatch(/console\.(?:log|error)|credential\}\)/)
+    expect(extension).toContain('No valid ${mission.title} evidence found.')
+    expect(extension).not.toMatch(/console\.(?:log|error)|credential\}\)|ENOENT/)
   })
 })

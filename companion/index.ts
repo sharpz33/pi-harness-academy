@@ -2,9 +2,9 @@ import type { ExtensionAPI } from '@earendil-works/pi-coding-agent'
 import { chmod, lstat, mkdir, readFile, rename, writeFile } from 'node:fs/promises'
 import { homedir, platform } from 'node:os'
 import { dirname, join } from 'node:path'
+import { missions } from '../src/missions'
 
 const ACADEMY_ORIGIN = 'https://piacade.my'
-const REQUIRED_HEIST_CHECKS = ['capability-executed', 'source-unchanged', 'boundaries-held', 'choice-explained'] as const
 const profileRoot = process.env.PI_CODING_AGENT_DIR || join(homedir(), '.pi', 'agent')
 const credentialPath = join(profileRoot, 'academy', 'device.json')
 
@@ -12,6 +12,16 @@ const request = async <T>(path: string, init: RequestInit): Promise<{ status: nu
   const response = await fetch(`${ACADEMY_ORIGIN}${path}`, { ...init, signal: AbortSignal.timeout(10_000) })
   const body = await response.json() as T
   return { status: response.status, body }
+}
+
+const inspectLocalFile = async (path: string, maxBytes: number, missingMessage: string) => {
+  try {
+    const info = await lstat(path)
+    if (!info.isFile() || info.isSymbolicLink() || info.size > maxBytes) throw new Error(missingMessage)
+    return info
+  } catch {
+    throw new Error(missingMessage)
+  }
 }
 
 const saveCredential = async (credential: string): Promise<void> => {
@@ -24,8 +34,7 @@ const saveCredential = async (credential: string): Promise<void> => {
 }
 
 const loadCredential = async (): Promise<string> => {
-  const info = await lstat(credentialPath)
-  if (!info.isFile() || info.isSymbolicLink() || info.size > 2048) throw new Error('Academy credential file is unsafe')
+  await inspectLocalFile(credentialPath, 2048, 'No valid Academy authorization found. Run /academy-connect first.')
   const parsed = JSON.parse(await readFile(credentialPath, 'utf8')) as { origin?: unknown; credential?: unknown }
   if (parsed.origin !== ACADEMY_ORIGIN || typeof parsed.credential !== 'string' || !/^[A-Za-z0-9_-]{43}$/.test(parsed.credential)) {
     throw new Error('Academy credential file is invalid')
@@ -87,23 +96,25 @@ export default function academyCompanion(pi: ExtensionAPI) {
   })
 
   pi.registerCommand('academy-check', {
-    description: 'Submit allowlisted local evidence for The Heist',
+    description: 'Submit allowlisted local evidence for one Academy mission',
     handler: async (args, ctx) => {
-      if (args.trim() !== 'the-heist') {
-        ctx.ui.notify('Usage: /academy-check the-heist', 'warning')
+      const slug = args.trim()
+      const mission = missions.find((candidate) => candidate.slug === slug)
+      if (!mission?.evidence) {
+        ctx.ui.notify('Usage: /academy-check <mission-slug>', 'warning')
         return
       }
       try {
-        const evidencePath = join(ctx.cwd, '.pi-academy', 'evidence', 'the-heist.json')
-        const info = await lstat(evidencePath)
-        if (!info.isFile() || info.isSymbolicLink() || info.size > 4096) throw new Error('The Heist evidence file is unsafe')
+        const requiredChecks = mission.evidence.map(({ id }) => id)
+        const evidencePath = join(ctx.cwd, '.pi-academy', 'evidence', `${slug}.json`)
+        await inspectLocalFile(evidencePath, 4096, `No valid ${mission.title} evidence found. Run its current mission prompt, then retry /academy-check ${slug}.`)
         const parsed = JSON.parse(await readFile(evidencePath, 'utf8')) as { mission?: unknown; checks?: Record<string, unknown> }
-        if (parsed.mission !== 'the-heist' || !parsed.checks || Object.keys(parsed.checks).some((id) => !REQUIRED_HEIST_CHECKS.includes(id as typeof REQUIRED_HEIST_CHECKS[number]))) {
-          throw new Error('The Heist evidence shape is invalid')
+        if (parsed.mission !== slug || !parsed.checks || Object.keys(parsed.checks).some((id) => !requiredChecks.includes(id))) {
+          throw new Error(`${mission.title} evidence shape is invalid`)
         }
-        const passedChecks = REQUIRED_HEIST_CHECKS.filter((id) => parsed.checks?.[id] === true)
+        const passedChecks = requiredChecks.filter((id) => parsed.checks?.[id] === true)
         const credential = await loadCredential()
-        const result = await request<{ status: string; readiness?: number; nextMission?: string; missingChecks?: string[] }>('/api/checkpoints/the-heist', {
+        const result = await request<{ status: string; readiness?: number; nextMission?: string }>('/api/checkpoints/' + encodeURIComponent(slug), {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${credential}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({ passedChecks }),
@@ -111,7 +122,7 @@ export default function academyCompanion(pi: ExtensionAPI) {
         if (result.status !== 200 || result.body.status !== 'passed') {
           throw new Error(`Checkpoint ${result.body.status || 'failed'}; complete every local evidence check`)
         }
-        ctx.ui.notify(`The Heist verified. Readiness: ${result.body.readiness}%. Next: ${result.body.nextMission}.`, 'info')
+        ctx.ui.notify(`${mission.title} verified. Readiness: ${result.body.readiness}%. Next: ${result.body.nextMission ?? 'complete'}.`, 'info')
       } catch (error) {
         ctx.ui.notify(error instanceof Error ? error.message : 'Checkpoint submission failed', 'error')
       }

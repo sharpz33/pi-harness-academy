@@ -166,9 +166,12 @@ describe('verified journey routes', () => {
     approveDevice: vi.fn().mockResolvedValue(true),
     exchangeDevice: vi.fn().mockResolvedValue({ status: 'authorized', credential: 'c'.repeat(43), expiresIn: 7_776_000 }),
     submitCheckpoint: vi.fn().mockResolvedValue({ status: 'passed', readiness: 8, completedSlugs: ['the-heist'], nextMission: 'x-ray-vision' }),
-    getJourney: vi.fn().mockResolvedValue({ completedSlugs: ['the-heist'], devices: [{ id: 'device-1', profileLabel: 'Academy Pi' }] }),
+    getJourney: vi.fn().mockResolvedValue({ completedSlugs: ['the-heist'], devices: [{ id: 'device-1', profileLabel: 'Academy Pi' }], proof: null }),
     revokeDevice: vi.fn().mockResolvedValue(true),
     deleteProgress: vi.fn().mockResolvedValue(undefined),
+    publishProof: vi.fn().mockResolvedValue({ publicId: 'p'.repeat(43), displayName: 'Pi Learner' }),
+    findProof: vi.fn().mockResolvedValue({ publicId: 'p'.repeat(43), displayName: 'Pi Learner' }),
+    revokeProof: vi.fn().mockResolvedValue(undefined),
   })
 
   it('creates and exchanges a device authorization over JSON', async () => {
@@ -220,6 +223,18 @@ describe('verified journey routes', () => {
 
     expect(response.status).toBe(303)
     expect(response.headers.get('location')).toBe('/sign-in?return_to=%2Fjourney')
+  })
+
+  it('renders public completion proof without private progress or email', async () => {
+    const response = await createApp(auth(), journey()).request(`https://academy.example/proof/${'p'.repeat(43)}`)
+    const body = await response.text()
+
+    expect(response.status).toBe(200)
+    expect(body).toContain('Pi Learner completed Pi Harness Academy.')
+    expect(body).toContain('Share on LinkedIn')
+    expect(body).not.toContain('learner-1')
+    expect(body).not.toMatch(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+/)
+    expect(response.headers.get('cache-control')).toBe('no-store')
   })
 })
 

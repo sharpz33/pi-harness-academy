@@ -9,7 +9,7 @@ import { createJourneyService } from './journey/runtime'
 import type { JourneyApplication } from './journey/types'
 import { missions } from './missions'
 import { styles } from './styles'
-import { renderAuthRequestResult, renderDeleteProgress, renderDeviceApproval, renderHome, renderJourney, renderMission, renderNotFound, renderSignIn, renderVerifyLogin } from './views'
+import { renderAuthRequestResult, renderCompletionProof, renderDeleteProgress, renderDeviceApproval, renderHome, renderJourney, renderMission, renderNotFound, renderSignIn, renderVerifyLogin } from './views'
 
 type AppEnv = { Bindings: CloudflareBindings }
 
@@ -24,11 +24,11 @@ export const createApp = (authOverride?: AuthApplication, journeyOverride?: Jour
   app.use('*', async (c, next) => {
     await next()
     c.header('Content-Security-Policy', "default-src 'self'; style-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'")
-    c.header('Referrer-Policy', c.req.path.startsWith('/auth/') || c.req.path.startsWith('/api/') || c.req.path.startsWith('/device') || c.req.path.startsWith('/journey') || c.req.path === '/sign-in' ? 'no-referrer' : 'strict-origin-when-cross-origin')
+    c.header('Referrer-Policy', c.req.path.startsWith('/auth/') || c.req.path.startsWith('/api/') || c.req.path.startsWith('/device') || c.req.path.startsWith('/journey') || c.req.path.startsWith('/proof/') || c.req.path === '/sign-in' ? 'no-referrer' : 'strict-origin-when-cross-origin')
     c.header('X-Content-Type-Options', 'nosniff')
     c.header('X-Frame-Options', 'DENY')
 
-    if (c.req.path.startsWith('/auth/') || c.req.path.startsWith('/api/') || c.req.path.startsWith('/device') || c.req.path.startsWith('/journey') || c.req.path === '/sign-in' || c.req.path === '/logout') {
+    if (c.req.path.startsWith('/auth/') || c.req.path.startsWith('/api/') || c.req.path.startsWith('/device') || c.req.path.startsWith('/journey') || c.req.path.startsWith('/proof/') || c.req.path === '/sign-in' || c.req.path === '/logout') {
       c.header('Cache-Control', 'no-store')
     }
   })
@@ -152,6 +152,28 @@ export const createApp = (authOverride?: AuthApplication, journeyOverride?: Jour
     const body = await c.req.parseBody()
     await journeyFor(c.env).revokeDevice(session.learnerId, formValue(body.device_id))
     return c.redirect('/journey', 303)
+  })
+
+  app.post('/journey/proof', async (c) => {
+    const sessionToken = getCookie(c, SESSION_COOKIE)
+    const session = sessionToken ? await authFor(c.env).findSession(sessionToken) : null
+    if (!session) return c.redirect('/sign-in?return_to=%2Fjourney', 303)
+    const body = await c.req.parseBody()
+    const proof = await journeyFor(c.env).publishProof(session.learnerId, formValue(body.display_name))
+    return proof ? c.redirect(`/proof/${proof.publicId}`, 303) : c.text('Completion proof is unavailable.', 409)
+  })
+
+  app.post('/journey/proof/revoke', async (c) => {
+    const sessionToken = getCookie(c, SESSION_COOKIE)
+    const session = sessionToken ? await authFor(c.env).findSession(sessionToken) : null
+    if (!session) return c.redirect('/sign-in?return_to=%2Fjourney', 303)
+    await journeyFor(c.env).revokeProof(session.learnerId)
+    return c.redirect('/journey', 303)
+  })
+
+  app.get('/proof/:publicId', async (c) => {
+    const proof = await journeyFor(c.env).findProof(c.req.param('publicId'))
+    return proof ? c.html(renderCompletionProof(proof)) : c.html(renderNotFound(), 404)
   })
 
   app.get('/journey/delete', async (c) => {
