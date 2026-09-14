@@ -20,7 +20,7 @@
 - [x] Companion v0.2.0 merge, migrations, tag, deployment, and production smoke are complete.
 - [x] Controlled local D1 journey reaches 8% readiness with The Heist verified and X-Ray Vision next.
 - [ ] Full production learner journey reaches 8% readiness through `/academy-check the-heist`.
-- [ ] Current course `mvp-check` completed with no certification blocker, or its unavailability recorded with the repository quality gate used instead.
+- [x] Current course `mvp-check` is unavailable in the course project, Downloads, and local project tree; the repository quality gate is recorded and used instead.
 - [ ] Submission sent and confirmation captured.
 
 ## Required repository artifacts
@@ -74,3 +74,11 @@ Generated screenshots remain in ignored local output and are not committed. Each
 | `Twój komentarz` | yes | Polish product, Pi companion, privacy, architecture, and quality summary prepared locally. |
 
 Do not submit until the final production smoke, screenshot review, exact submission commit tag, and user approval are complete.
+
+## Final verification — 2026-09-14
+
+- Fresh local D1 applied migrations `0001`–`0003` successfully.
+- `npm ci`, TypeScript, 55 Vitest tests, Wrangler dry-run, dependency audit, secret scan, and `git diff --check` passed.
+- Required `check` status passed on deployed `main` commit `080bb9516345540d55c2dd3f66819567b7280d0c`.
+- Production smoke passed for twelve public mission routes, all mission prompts and four-check evidence sections, anonymous homepage access, private Journey redirect, unknown proof rejection, and security headers.
+- Authenticated Journey evidence was captured from a controlled local D1 integration account; it contains no real learner identity or production credential.
