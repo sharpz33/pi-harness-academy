@@ -10,6 +10,7 @@ service-account.json
 *.p12
 *.pfx
 node_modules/
+OUT/
 
 # Licensed course tooling — local only, never publish
 .ai/

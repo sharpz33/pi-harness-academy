@@ -1,6 +1,6 @@
 # Pi Harness Academy
 
-Pi Harness Academy is a public, twelve-mission path for turning a minimal Pi coding agent into a controlled multi-agent pull-request pipeline. Every lesson and mission instruction will remain readable without an account. Authentication will protect only verified checkpoints, private progress, readiness, synchronization, and completion proof.
+Pi Harness Academy is a public, twelve-mission path for turning a minimal Pi coding agent into a controlled multi-agent pull-request pipeline. Every lesson and mission instruction remains readable without an account. Authentication will protect only verified checkpoints, private progress, readiness, synchronization, and completion proof.
 
 The repository contains Mission Control, all twelve public lessons, production passwordless login, and the Academy companion extension. The companion uses a revocable device credential to submit a fixed allowlist of local checkpoint booleans; it never submits source, paths, prompts, environment values, credentials, or transcripts. Fresh Pi users may follow the Academy in their default profile; learners with an existing Pi setup are offered a separate Academy profile.
 
