@@ -26,13 +26,15 @@ describe('public academy shell', () => {
     expect(body).toContain('The Gauntlet')
   })
 
-  it('serves the stylesheet with an explicit content type', async () => {
+  it('serves responsive styles with an explicit content type', async () => {
     const response = await app.request('http://academy.local/styles.css')
+    const body = await response.text()
 
     expect(response.status).toBe(200)
     expect(response.headers.get('content-type')).toContain('text/css')
     expectSecurityHeaders(response)
-    expect(await response.text()).toContain('--signal: #b8ff3d')
+    expect(body).toContain('--signal: #b8ff3d')
+    expect(body).toMatch(/\.command-card\s*{\s*min-width:\s*0;/)
   })
 })
 
