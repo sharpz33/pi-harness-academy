@@ -47,12 +47,15 @@ describe('The Heist staged prompt', () => {
     forbiddenRoots.forEach((root) => expect(prompt).toContain(root))
   })
 
-  it('quarantines executable and dependent resources', () => {
-    const quarantinedResources = ['MCP', 'hooks', 'plugins', 'packages', 'extensions', 'scripts', 'imports']
+  it('allows bounded Markdown-only native packages while quarantining executable dependencies', () => {
+    const quarantinedResources = ['MCP', 'hooks', 'plugins', 'extensions', 'scripts', 'imports']
 
     expect(prompt).toContain('self-contained')
     expect(prompt).toContain('regular Markdown file')
-    expect(prompt).toContain('references sibling files')
+    expect(prompt).toContain('native-package candidate')
+    expect(prompt).toContain('package-internal Markdown files')
+    expect(prompt).toContain('nested symlinks, non-Markdown files')
+    expect(prompt).toContain('resources outside the selected package')
     quarantinedResources.forEach((resource) => expect(prompt).toContain(resource))
   })
 
@@ -79,7 +82,7 @@ describe('The Heist staged prompt', () => {
     expect(prompt).toContain('Record a local digest')
     expect(prompt).toContain('Recompute the local source digest')
     expect(prompt).toContain('source_unchanged: true or false')
-    expect(prompt).toContain('Do not print or transmit the digest')
+    expect(prompt).toContain('Do not print or transmit any digest')
     expect(prompt).toContain('Do not send inventory, file contents, paths, or digests')
     expect(prompt).toContain('Leave the source untouched')
   })
