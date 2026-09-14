@@ -335,6 +335,7 @@ pre[tabindex]:focus-visible {
 }
 
 .command-card {
+  min-width: 0;
   padding: 1rem;
 }
 
