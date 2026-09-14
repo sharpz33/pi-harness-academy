@@ -234,7 +234,14 @@ export const renderJourney = (state: JourneyState, missions: readonly Mission[])
   const completed = new Set(state.completedSlugs)
   const next = missions.find(({ slug }) => !completed.has(slug))
   const readiness = Math.round((completed.size / missions.length) * 100)
-  const rows = missions.map((mission) => `<li><strong>${missionNumber(mission.number)} ${escapeHtml(mission.title)}</strong> — ${completed.has(mission.slug) ? 'VERIFIED' : mission.slug === next?.slug ? 'NEXT' : 'LOCKED'}</li>`).join('')
+  const rows = missions.map((mission) => {
+    const isNext = mission.slug === next?.slug
+    const title = isNext
+      ? `<a href="/missions/${escapeHtml(mission.slug)}">${escapeHtml(mission.title)}</a>`
+      : escapeHtml(mission.title)
+    const status = completed.has(mission.slug) ? 'VERIFIED' : isNext ? 'NEXT' : 'LOCKED'
+    return `<li><strong>${missionNumber(mission.number)} ${title}</strong> — ${status}</li>`
+  }).join('')
   const devices = state.devices.length > 0
     ? state.devices.map((device) => `<li><span>${escapeHtml(device.profileLabel)}</span><form method="post" action="/journey/devices/revoke"><input type="hidden" name="device_id" value="${escapeHtml(device.id)}"><button class="auth-link auth-link--button" type="submit">Revoke</button></form></li>`).join('')
     : '<li>No authorized Pi profile yet.</li>'
