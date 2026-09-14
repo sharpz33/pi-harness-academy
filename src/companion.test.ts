@@ -5,6 +5,7 @@ import academyCompanion from '../companion/index'
 
 const extension = readFileSync(decodeURIComponent(new URL('../companion/index.ts', import.meta.url).pathname), 'utf8')
 const manifest = JSON.parse(readFileSync(decodeURIComponent(new URL('../package.json', import.meta.url).pathname), 'utf8')) as { pi?: { extensions?: string[] } }
+const gitignore = readFileSync(decodeURIComponent(new URL('../.gitignore', import.meta.url).pathname), 'utf8')
 
 describe('Academy companion package', () => {
   it('is discoverable and registers both Pi commands', () => {
@@ -28,5 +29,9 @@ describe('Academy companion package', () => {
     expect(extension).toContain("info.isSymbolicLink()")
     expect(extension).toContain('No valid ${mission.title} evidence found.')
     expect(extension).not.toMatch(/console\.(?:log|error)|credential\}\)|ENOENT/)
+  })
+
+  it('keeps generated checkpoint evidence outside version control', () => {
+    expect(gitignore.split(/\r?\n/)).toContain('.pi-academy/')
   })
 })
