@@ -19,7 +19,7 @@
 - [x] Completion-gated public proof, revocation, link copy, and LinkedIn share are implemented.
 - [x] Companion v0.2.0 merge, migrations, tag, deployment, and production smoke are complete.
 - [x] Controlled local D1 journey reaches 8% readiness with The Heist verified and X-Ray Vision next.
-- [ ] Full production learner journey reaches 8% readiness through `/academy-check the-heist`.
+- [x] Full production learner journey reaches 8% readiness through `/academy-check the-heist`.
 - [x] Current course `mvp-check` is unavailable in the course project, Downloads, and local project tree; the repository quality gate is recorded and used instead.
 - [ ] Submission sent and confirmation captured.
 
@@ -48,7 +48,7 @@
 - [x] Full public homepage with all twelve missions marked OPEN.
 - [x] Full The Heist lesson with mission prompt and evidence section.
 - [x] Passwordless sign-in screen.
-- [x] Private Journey on a controlled local D1 account showing one verified mission, 8% readiness, and X-Ray Vision next.
+- [x] Private production Journey showing one verified mission, 8% readiness, and X-Ray Vision next without learner identity.
 - [x] GitHub Actions required check passing on the final deployed `main` commit.
 - [ ] Optional device authorization screen using only a synthetic or expired code.
 - [ ] Optional public completion-proof fixture using only a deliberately selected display name.
@@ -78,7 +78,9 @@ Do not submit until the final production smoke, screenshot review, exact submiss
 ## Final verification — 2026-09-14
 
 - Fresh local D1 applied migrations `0001`–`0003` successfully.
-- `npm ci`, TypeScript, 55 Vitest tests, Wrangler dry-run, dependency audit, secret scan, and `git diff --check` passed.
-- Required `check` status passed on deployed `main` commit `080bb9516345540d55c2dd3f66819567b7280d0c`.
+- `npm ci`, TypeScript, 56 Vitest tests, Wrangler dry-run, dependency audit, secret scan, and `git diff --check` passed.
+- Required `check` status passed on deployed `main` commit `601b4c41f184733a3a83317dc933a359d5dda131`.
 - Production smoke passed for twelve public mission routes, all mission prompts and four-check evidence sections, anonymous homepage access, private Journey redirect, unknown proof rejection, and security headers.
-- Authenticated Journey evidence was captured from a controlled local D1 integration account; it contains no real learner identity or production credential.
+- All twelve production mission pages fit a 390 px mobile viewport without horizontal overflow.
+- A real authenticated production Journey reached 8% through the companion; the screenshot contains no learner identity, credential, or device code.
+- The Journey title marked `NEXT` links directly to the recommended public mission.
