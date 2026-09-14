@@ -201,6 +201,7 @@ describe('verified journey routes', () => {
     expect(response.status).toBe(200)
     expect(journeyApp.getJourney).toHaveBeenCalledWith('learner-1')
     expect(body).toContain('8% ready.')
+    expect(body).toContain('<a href="/missions/x-ray-vision">X-Ray Vision</a></strong> — NEXT')
     expect(body).toContain('Academy Pi')
     expect(response.headers.get('cache-control')).toBe('no-store')
   })
