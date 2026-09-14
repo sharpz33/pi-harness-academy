@@ -14,6 +14,21 @@ The repository contains Mission Control, all twelve public lessons, production p
 
 The product and infrastructure decisions are recorded in `context/foundation/`.
 
+- Live application: <https://piacade.my>
+- Required CI: <https://github.com/sharpz33/pi-harness-academy/actions/workflows/ci.yml>
+- Pinned companion release: [`verified-journey-v0.2.0`](https://github.com/sharpz33/pi-harness-academy/tree/verified-journey-v0.2.0)
+
+## Core product flow
+
+1. Read any of the twelve lessons without an account.
+2. Sign in through a scanner-safe passwordless email flow to create a private learner session.
+3. Authorize a selected Pi profile with `/academy-connect` and a short code.
+4. Complete a mission locally, then submit its allowlisted evidence with `/academy-check <mission-slug>`.
+5. Review private progress, readiness, and the recommended next mission.
+6. Revoke a profile or explicitly delete progress; after 12/12 missions, optionally publish a revocable completion proof.
+
+The domain CRUD is learner-owned: authorization and checkpoint submission create records, Journey reads them, repeated verified checkpoints update idempotently, and learners can revoke profiles or delete progress. Business rules enforce ownership, sequential unlocking, exact evidence IDs, readiness calculation, next-mission selection, and completion-gated public proof.
+
 ## Local development
 
 Requirements: Node.js 24 or newer and npm.
