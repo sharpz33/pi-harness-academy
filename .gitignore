@@ -11,6 +11,7 @@ service-account.json
 *.pfx
 node_modules/
 OUT/
+.pi-academy/
 
 # Licensed course tooling — local only, never publish
 .ai/
