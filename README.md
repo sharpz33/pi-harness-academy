@@ -1,6 +1,6 @@
 # Pi Harness Academy
 
-Pi Harness Academy is a public, twelve-mission path for turning a minimal Pi coding agent into a controlled multi-agent pull-request pipeline. Every lesson and mission instruction will remain readable without an account. Authentication will protect only verified checkpoints, private progress, readiness, synchronization, and completion proof.
+Pi Harness Academy is a public, twelve-mission path for turning a minimal Pi coding agent into a controlled multi-agent pull-request pipeline. Every lesson and mission instruction remains readable without an account. Authentication will protect only verified checkpoints, private progress, readiness, synchronization, and completion proof.
 
 The repository contains Mission Control, all twelve public lessons, production passwordless login, and the Academy companion extension. The companion uses a revocable device credential to submit a fixed allowlist of local checkpoint booleans; it never submits source, paths, prompts, environment values, credentials, or transcripts. Fresh Pi users may follow the Academy in their default profile; learners with an existing Pi setup are offered a separate Academy profile.
 
@@ -13,6 +13,21 @@ The repository contains Mission Control, all twelve public lessons, production p
 - GitHub Actions for checks and deployment through Wrangler
 
 The product and infrastructure decisions are recorded in `context/foundation/`.
+
+- Live application: <https://piacade.my>
+- Required CI: <https://github.com/sharpz33/pi-harness-academy/actions/workflows/ci.yml>
+- Pinned companion release: [`verified-journey-v0.2.0`](https://github.com/sharpz33/pi-harness-academy/tree/verified-journey-v0.2.0)
+
+## Core product flow
+
+1. Read any of the twelve lessons without an account.
+2. Sign in through a scanner-safe passwordless email flow to create a private learner session.
+3. Authorize a selected Pi profile with `/academy-connect` and a short code.
+4. Complete a mission locally, then submit its allowlisted evidence with `/academy-check <mission-slug>`.
+5. Review private progress, readiness, and the recommended next mission.
+6. Revoke a profile or explicitly delete progress; after 12/12 missions, optionally publish a revocable completion proof.
+
+The domain CRUD is learner-owned: authorization and checkpoint submission create records, Journey reads them, repeated verified checkpoints update idempotently, and learners can revoke profiles or delete progress. Business rules enforce ownership, sequential unlocking, exact evidence IDs, readiness calculation, next-mission selection, and completion-gated public proof.
 
 ## Local development
 

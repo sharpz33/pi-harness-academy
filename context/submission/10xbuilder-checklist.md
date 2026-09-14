@@ -2,7 +2,7 @@
 
 ## Fixed deadline
 
-- Submission target: 2026-09-14 20:00.
+- Submission target: 2026-09-14 18:00.
 - Hard deadline: 2026-09-14 23:59.
 - Production URL: <https://piacade.my>.
 - Repository: <https://github.com/sharpz33/pi-harness-academy>.
@@ -17,9 +17,10 @@
 - [x] Revocable profile authorization and bearer-scoped checkpoint API are deployed.
 - [x] Private progress, readiness, next action, and explicit deletion are implemented.
 - [x] Completion-gated public proof, revocation, link copy, and LinkedIn share are implemented.
-- [ ] Final companion v0.2.0 merge, migration, tag, and production smoke complete.
-- [ ] Full user journey reaches 8% readiness through `/academy-check the-heist`.
-- [ ] Final `mvp-check` completed with no certification blocker.
+- [x] Companion v0.2.0 merge, migrations, tag, deployment, and production smoke are complete.
+- [x] Controlled local D1 journey reaches 8% readiness with The Heist verified and X-Ray Vision next.
+- [ ] Full production learner journey reaches 8% readiness through `/academy-check the-heist`.
+- [x] Current course `mvp-check` is unavailable in the course project, Downloads, and local project tree; the repository quality gate is recorded and used instead.
 - [ ] Submission sent and confirmation captured.
 
 ## Required repository artifacts
@@ -44,18 +45,40 @@
 
 ## Screenshot shot list
 
-Capture after final deployment at desktop and mobile widths:
+- [x] Full public homepage with all twelve missions marked OPEN.
+- [x] Full The Heist lesson with mission prompt and evidence section.
+- [x] Passwordless sign-in screen.
+- [x] Private Journey on a controlled local D1 account showing one verified mission, 8% readiness, and X-Ray Vision next.
+- [x] GitHub Actions required check passing on the final deployed `main` commit.
+- [ ] Optional device authorization screen using only a synthetic or expired code.
+- [ ] Optional public completion-proof fixture using only a deliberately selected display name.
 
-1. Homepage with all twelve missions marked OPEN.
-2. The Heist lesson with mission prompt and evidence section.
-3. Passwordless sign-in screen.
-4. Device authorization screen with a synthetic or expired code only; never capture a live device code.
-5. Private Journey showing one verified mission, 8% readiness, and X-Ray Vision next; crop all browser/account identity.
-6. Public completion-proof fixture containing only a deliberately selected display name.
-7. GitHub Actions required check passing on final `main` commit.
+Generated screenshots remain in ignored local output and are not committed. Each selected image must be reviewed for email, cookies, live codes, tokens, local paths, account IDs, and browser-profile identity before upload.
 
-Store generated screenshots outside Git unless the submission explicitly requires committed images. Redact addresses, cookies, codes, tokens, local paths, account IDs, and browser profile identity.
+## Active 10xBuilder form map
 
-## Form data still needed
+| Exact field | Required | Submission value or evidence |
+|---|---:|---|
+| `Email` | yes | Enter directly in Baserow; do not store in Git. |
+| `Imię i nazwisko/ Full Name` | yes | Enter directly in Baserow; do not store in Git. |
+| `Typ projektu/ Project Type` | yes | `Własny projekt` |
+| Promotional-use consent | yes | Yes, explicitly confirmed by the user. |
+| `Repozytorium projektu na GitHub/ Project Repository on GitHub` | yes | <https://github.com/sharpz33/pi-harness-academy> |
+| `Publiczny adres opublikowanej aplikacji` | no | <https://piacade.my> |
+| `Screenshot: Ekran logowania` | no | Full sign-in page. |
+| `Screenshot: Strona główna / Ekran po zalogowaniu` | yes | Full public homepage. |
+| `Screenshot: Główna funkcjonalność nr 1` | yes | Full The Heist mission. |
+| `Screenshot: Główna funkcjonalność nr 2` | yes | Private verified Journey. |
+| `Screenshot: Poprawnie działający test lub zestaw testów` | yes | Successful required GitHub Actions check. |
+| `Załączniki niestandardowe` | no | Leave empty unless the final review identifies a specific gap. |
+| `Twój komentarz` | yes | Polish product, Pi companion, privacy, architecture, and quality summary prepared locally. |
 
-Nie mam w plikach dokładnych nazw pól aktywnego formularza 10xBuilder. Before submission, copy the field labels into this file and map each field to existing evidence instead of guessing answers.
+Do not submit until the final production smoke, screenshot review, exact submission commit tag, and user approval are complete.
+
+## Final verification — 2026-09-14
+
+- Fresh local D1 applied migrations `0001`–`0003` successfully.
+- `npm ci`, TypeScript, 55 Vitest tests, Wrangler dry-run, dependency audit, secret scan, and `git diff --check` passed.
+- Required `check` status passed on deployed `main` commit `080bb9516345540d55c2dd3f66819567b7280d0c`.
+- Production smoke passed for twelve public mission routes, all mission prompts and four-check evidence sections, anonymous homepage access, private Journey redirect, unknown proof rejection, and security headers.
+- Authenticated Journey evidence was captured from a controlled local D1 integration account; it contains no real learner identity or production credential.
