@@ -26,6 +26,28 @@ describe('public academy shell', () => {
     expect(body).toContain('The Gauntlet')
   })
 
+  it('serves all twelve Polish missions without changing the English root', async () => {
+    const [englishResponse, polishResponse, missionResponse] = await Promise.all([
+      app.request('http://academy.local/'),
+      app.request('http://academy.local/pl'),
+      app.request('http://academy.local/pl/missions/the-heist'),
+    ])
+    const english = await englishResponse.text()
+    const polish = await polishResponse.text()
+    const mission = await missionResponse.text()
+
+    expect(english).toContain('<html lang="en">')
+    expect(english).toContain('Build the harness')
+    expect(polishResponse.status).toBe(200)
+    expect(polish).toContain('<html lang="pl">')
+    expect(polish).toContain('Zbuduj harness')
+    expect(polish.match(/data-mission=/g)).toHaveLength(missions.length)
+    expect(polish).toContain('href="/pl/missions/the-heist"')
+    expect(mission).toContain('<h1>Skok</h1>')
+    expect(mission).toContain('Prompt misji — po angielsku')
+    expect(mission).toContain('You are running Mission 01: The Heist.')
+  })
+
   it('serves responsive styles with an explicit content type', async () => {
     const response = await app.request('http://academy.local/styles.css')
     const body = await response.text()
@@ -82,6 +104,25 @@ describe('passwordless learner entry', () => {
     expect(response.headers.get('cache-control')).toBe('no-store')
     expect(auth.issueLogin).toHaveBeenCalledWith('learner@example.com', '/missions/the-heist')
     expect(await response.text()).toContain('Check your inbox.')
+  })
+
+  it('keeps the Polish sign-in flow localized and scanner-safe', async () => {
+    const auth = createFakeAuth({
+      confirmLogin: vi.fn(async () => ({ status: 'authenticated' as const, sessionToken: 's'.repeat(43), returnTo: '/pl/journey' })),
+    })
+    const request = await submit(
+      '/auth/requests',
+      new URLSearchParams({ email: 'learner@example.com', return_to: '/pl/journey' }),
+      auth,
+    )
+    const verify = await createApp(auth).request(`https://academy.example/auth/verify?token=${'a'.repeat(43)}&locale=pl`)
+    const confirm = await submit('/auth/verify', new URLSearchParams({ token: 'a'.repeat(43), locale: 'pl' }), auth)
+
+    expect(request.status).toBe(202)
+    expect(await request.text()).toContain('Sprawdź skrzynkę.')
+    expect(await verify.text()).toContain('Potwierdź logowanie')
+    expect(auth.inspectLogin).toHaveBeenCalledOnce()
+    expect(confirm.headers.get('location')).toBe('/pl/journey')
   })
 
   it.each([
@@ -141,6 +182,15 @@ describe('passwordless learner entry', () => {
     expect(response.status).toBe(303)
     expect(auth.logout).toHaveBeenCalledWith('s'.repeat(43))
     expect(response.headers.get('set-cookie')).toContain('Max-Age=0')
+  })
+
+  it('logs out to the matching Polish homepage', async () => {
+    const auth = createFakeAuth()
+    const response = await submit('/pl/logout', new URLSearchParams(), auth, `${SESSION_COOKIE}=${'s'.repeat(43)}`)
+
+    expect(response.status).toBe(303)
+    expect(response.headers.get('location')).toBe('/pl')
+    expect(auth.logout).toHaveBeenCalledWith('s'.repeat(43))
   })
 
   it('rejects cross-origin form posts', async () => {
@@ -206,6 +256,20 @@ describe('verified journey routes', () => {
     expect(response.headers.get('cache-control')).toBe('no-store')
   })
 
+  it('renders equivalent private progress in Polish', async () => {
+    const response = await createApp(auth(), journey()).request('https://academy.example/pl/journey', {
+      headers: { Cookie: `${SESSION_COOKIE}=${'s'.repeat(43)}` },
+    })
+    const body = await response.text()
+
+    expect(response.status).toBe(200)
+    expect(body).toContain('<html lang="pl">')
+    expect(body).toContain('8% gotowości.')
+    expect(body).toContain('<a href="/pl/missions/x-ray-vision">Rentgen</a></strong> — NASTĘPNA')
+    expect(body).toContain('Usuń zweryfikowany postęp')
+    expect(response.headers.get('cache-control')).toBe('no-store')
+  })
+
   it('submits checkpoints through a bearer device credential', async () => {
     const journeyApp = journey()
     const checks = ['capability-executed', 'source-unchanged', 'boundaries-held', 'choice-explained']
@@ -219,13 +283,19 @@ describe('verified journey routes', () => {
     expect(journeyApp.submitCheckpoint).toHaveBeenCalledWith('c'.repeat(43), 'the-heist', checks)
   })
 
-  it('redirects anonymous journey access to sign-in', async () => {
+  it('redirects anonymous journey access to locale-matched sign-in', async () => {
     const authApp = auth()
     vi.mocked(authApp.findSession).mockResolvedValue(null)
-    const response = await createApp(authApp, journey()).request('https://academy.example/journey')
+    const testApp = createApp(authApp, journey())
+    const [english, polish] = await Promise.all([
+      testApp.request('https://academy.example/journey'),
+      testApp.request('https://academy.example/pl/journey'),
+    ])
 
-    expect(response.status).toBe(303)
-    expect(response.headers.get('location')).toBe('/sign-in?return_to=%2Fjourney')
+    expect(english.status).toBe(303)
+    expect(english.headers.get('location')).toBe('/sign-in?return_to=%2Fjourney')
+    expect(polish.status).toBe(303)
+    expect(polish.headers.get('location')).toBe('/pl/sign-in?return_to=%2Fpl%2Fjourney')
   })
 
   it('renders public completion proof without private progress or email', async () => {
@@ -276,13 +346,18 @@ describe('The Heist mission workspace', () => {
     }
   })
 
-  it('returns 404 for an unknown mission', async () => {
-    const response = await app.request('http://academy.local/missions/unknown-mission')
+  it('returns a locale-matched 404 for an unknown mission', async () => {
+    const [english, polish] = await Promise.all([
+      app.request('http://academy.local/missions/unknown-mission'),
+      app.request('http://academy.local/pl/missions/unknown-mission'),
+    ])
 
-    expect(response.status).toBe(404)
-    expect(response.headers.get('content-type')).toContain('text/html')
-    expectSecurityHeaders(response)
-    expect(await response.text()).toContain('Mission not found.')
+    expect(english.status).toBe(404)
+    expect(english.headers.get('content-type')).toContain('text/html')
+    expectSecurityHeaders(english)
+    expect(await english.text()).toContain('Mission not found.')
+    expect(polish.status).toBe(404)
+    expect(await polish.text()).toContain('Nie znaleziono misji.')
   })
 
   it('serves an ephemeral same-origin client script', async () => {
@@ -297,6 +372,7 @@ describe('The Heist mission workspace', () => {
     expect(body).toContain("evidenceChecks.length === 4")
     expect(body).toContain("evidenceReady.hidden = !isReady")
     expect(body).toContain("Text selected—copy it manually.")
+    expect(body).toContain('Tekst został zaznaczony — skopiuj go ręcznie.')
     expect(body).not.toMatch(/localStorage|sessionStorage|indexedDB|document\.cookie/)
     expect(body).not.toMatch(/\bfetch\s*\(|XMLHttpRequest|sendBeacon|WebSocket/)
   })

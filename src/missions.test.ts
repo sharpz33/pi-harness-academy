@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { heistMission, missions } from './missions'
+import { polishMissions } from './polish-missions'
 
 describe('mission catalog', () => {
   it('contains twelve ordered missions with unique slugs', () => {
@@ -20,6 +21,19 @@ describe('mission catalog', () => {
       expect(mission.prompt).toContain(`.pi-academy/evidence/${mission.slug}.json`)
       expect(mission.evidence).toHaveLength(4)
       expect(mission.sources?.every((source) => source.url.startsWith('https://'))).toBe(true)
+    })
+  })
+
+  it('localizes every lesson without changing executable contracts', () => {
+    expect(polishMissions).toHaveLength(missions.length)
+    polishMissions.forEach((mission, index) => {
+      const source = missions[index]
+      expect(mission.slug).toBe(source.slug)
+      expect(mission.title).not.toBe(source.title)
+      expect(mission.prompt).toBe(source.prompt)
+      expect(mission.launchBay?.commands.map(({ value }) => value)).toEqual(source.launchBay?.commands.map(({ value }) => value))
+      expect(mission.evidence?.map(({ id }) => id)).toEqual(source.evidence?.map(({ id }) => id))
+      expect(mission.sources?.map(({ url }) => url)).toEqual(source.sources?.map(({ url }) => url))
     })
   })
 
