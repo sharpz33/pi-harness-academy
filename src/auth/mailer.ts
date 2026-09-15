@@ -10,9 +10,13 @@ export class CloudflareAuthMailer implements AuthMailer {
   ) {}
 
   async sendLoginLink(message: LoginLinkMessage): Promise<void> {
-    const subject = 'Sign in to Pi Harness Academy'
-    const text = `Confirm your Pi Harness Academy sign-in:\n\n${message.url}\n\nThis link expires in ${message.expiresInMinutes} minutes. If you did not request it, ignore this email.`
-    const html = `<p>Confirm your Pi Harness Academy sign-in:</p><p><a href="${escapeHtml(message.url)}">Continue to Academy</a></p><p>This link expires in ${message.expiresInMinutes} minutes. If you did not request it, ignore this email.</p>`
+    const subject = message.locale === 'pl' ? 'Zaloguj się do Pi Harness Academy' : 'Sign in to Pi Harness Academy'
+    const text = message.locale === 'pl'
+      ? `Potwierdź logowanie do Pi Harness Academy:\n\n${message.url}\n\nLink wygaśnie za ${message.expiresInMinutes} minut. Jeśli nie prosisz o logowanie, zignoruj tę wiadomość.`
+      : `Confirm your Pi Harness Academy sign-in:\n\n${message.url}\n\nThis link expires in ${message.expiresInMinutes} minutes. If you did not request it, ignore this email.`
+    const html = message.locale === 'pl'
+      ? `<p>Potwierdź logowanie do Pi Harness Academy:</p><p><a href="${escapeHtml(message.url)}">Przejdź do Akademii</a></p><p>Link wygaśnie za ${message.expiresInMinutes} minut. Jeśli nie prosisz o logowanie, zignoruj tę wiadomość.</p>`
+      : `<p>Confirm your Pi Harness Academy sign-in:</p><p><a href="${escapeHtml(message.url)}">Continue to Academy</a></p><p>This link expires in ${message.expiresInMinutes} minutes. If you did not request it, ignore this email.</p>`
 
     await this.email.send({
       from: this.from,

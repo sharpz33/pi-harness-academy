@@ -1,4 +1,9 @@
 export const clientScript = `(() => {
+  const isPolish = document.documentElement.lang === 'pl'
+  const copyMessages = isPolish
+    ? { missing: 'Nie udało się skopiować: tekst jest niedostępny.', copied: 'Skopiowano.', fallback: 'Kopiowanie jest niedostępne. Tekst został zaznaczony — skopiuj go ręcznie.' }
+    : { missing: 'Copy failed: text is unavailable.', copied: 'Copied.', fallback: 'Copy unavailable. Text selected—copy it manually.' }
+
   const setCopyStatus = (button, message, state) => {
     const statusId = button.getAttribute('aria-describedby')
     const status = statusId ? document.getElementById(statusId) : null
@@ -33,7 +38,7 @@ export const clientScript = `(() => {
     const targetId = button.dataset.copyTarget
     const target = targetId ? document.getElementById(targetId) : null
     if (!target) {
-      setCopyStatus(button, 'Copy failed: text is unavailable.', 'error')
+      setCopyStatus(button, copyMessages.missing, 'error')
       return
     }
 
@@ -45,10 +50,10 @@ export const clientScript = `(() => {
       }
 
       await navigator.clipboard.writeText(text || '')
-      setCopyStatus(button, 'Copied.', 'success')
+      setCopyStatus(button, copyMessages.copied, 'success')
     } catch {
       selectCopyTarget(target)
-      setCopyStatus(button, 'Copy unavailable. Text selected—copy it manually.', 'error')
+      setCopyStatus(button, copyMessages.fallback, 'error')
     }
   })
 

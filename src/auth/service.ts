@@ -43,6 +43,8 @@ export class AuthService implements AuthApplication {
       return 'invalid_email'
     }
 
+    const returnTo = safeReturnTo(returnToInput)
+    const locale = returnTo === '/pl' || returnTo.startsWith('/pl/') ? 'pl' : 'en'
     const now = this.now()
     const rawToken = this.createToken()
     const tokenHash = await this.hash(rawToken)
@@ -52,7 +54,7 @@ export class AuthService implements AuthApplication {
         id: this.createId(),
         learnerId: this.createId(),
         tokenHash,
-        returnTo: safeReturnTo(returnToInput),
+        returnTo,
         createdAt: now,
         expiresAt: now + LOGIN_TOKEN_TTL_MS,
       },
@@ -65,12 +67,14 @@ export class AuthService implements AuthApplication {
 
     const url = new URL('/auth/verify', this.config.appOrigin)
     url.searchParams.set('token', rawToken)
+    if (locale === 'pl') url.searchParams.set('locale', locale)
 
     try {
       await this.mailer.sendLoginLink({
         to: email,
         url: url.toString(),
         expiresInMinutes: LOGIN_TOKEN_TTL_MS / 60_000,
+        locale,
       })
     } catch {
       await this.store.revokeLoginToken(tokenHash, now)

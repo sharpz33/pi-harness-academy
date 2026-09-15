@@ -86,6 +86,19 @@ describe('passwordless auth service', () => {
     )
   })
 
+  it('preserves Polish locale in the challenge and email link', async () => {
+    const state = makeStore()
+    const mail = makeMailer()
+    const service = makeService(state.store, mail.mailer)
+
+    await expect(service.issueLogin('learner@example.com', '/pl/journey')).resolves.toBe('sent')
+
+    expect(state.getChallenge()?.returnTo).toBe('/pl/journey')
+    expect(mail.sendLoginLink).toHaveBeenCalledWith(
+      expect.objectContaining({ locale: 'pl', url: expect.stringContaining('locale=pl') }),
+    )
+  })
+
   it('rejects invalid emails and unsafe return paths', async () => {
     const state = makeStore()
     const service = makeService(state.store, makeMailer().mailer)

@@ -43,6 +43,7 @@ export type LoginLinkMessage = {
   to: string
   url: string
   expiresInMinutes: number
+  locale: 'en' | 'pl'
 }
 
 export interface AuthMailer {
