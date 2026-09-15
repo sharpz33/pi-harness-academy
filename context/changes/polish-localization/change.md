@@ -1,6 +1,6 @@
 ---
 change: polish-localization
-status: active
+status: ready-for-review
 created: 2026-09-15
 ---
 

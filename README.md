@@ -14,7 +14,8 @@ The repository contains Mission Control, all twelve public lessons, production p
 
 The product and infrastructure decisions are recorded in `context/foundation/`.
 
-- Live application: <https://piacade.my>
+- Live application (English): <https://piacade.my>
+- Polish version: <https://piacade.my/pl>
 - Required CI: <https://github.com/sharpz33/pi-harness-academy/actions/workflows/ci.yml>
 - Pinned companion release: [`verified-journey-v0.2.0`](https://github.com/sharpz33/pi-harness-academy/tree/verified-journey-v0.2.0)
 
@@ -28,6 +29,10 @@ The product and infrastructure decisions are recorded in `context/foundation/`.
 6. Revoke a profile or explicitly delete progress; after 12/12 missions, optionally publish a revocable completion proof.
 
 The domain CRUD is learner-owned: authorization and checkpoint submission create records, Journey reads them, repeated verified checkpoints update idempotently, and learners can revoke profiles or delete progress. Business rules enforce ownership, sequential unlocking, exact evidence IDs, readiness calculation, next-mission selection, and completion-gated public proof.
+
+## Language versions
+
+English remains available at the original unprefixed routes. Polish pages use `/pl` and provide equivalent public, authentication, Journey, device, deletion, and completion-proof views. Mission prompts, command values, slugs, evidence IDs, and API payloads remain English and language-neutral to preserve their reviewed behavior.
 
 ## Local development
 
